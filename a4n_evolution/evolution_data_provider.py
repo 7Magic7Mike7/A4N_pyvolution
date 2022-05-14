@@ -17,8 +17,14 @@ class EvolutionSimulationDataProvider(DataProvider):
             self.__base_data_provider.request_new_data()
         self.__simulation.process_step()
 
+    def get_raw_data(self) -> str:
+        return "TODO"
+
     def get_prepared_data(self) -> Tuple[int, int, int]:
-        data = self.__base_data_provider.get_prepared_data()
+        data = self.__base_data_provider.get_raw_data()
+        while len(data) < 90:
+            data += data
+        data = data[:90]
         self.__simulation.populate(data)
         return self.__simulation.to_channel_triple()
 
@@ -28,4 +34,4 @@ class SimpleEvolSimDP(EvolutionSimulationDataProvider):
         simulation = SimpleSimulation()
         data_provider = RandomDataProvider()
         request_decider = RequestDecider()
-        super(SimpleEvolSimDP, self).__init__(simulation, data_provider, request_decider.ever_x_steps(10))
+        super(SimpleEvolSimDP, self).__init__(simulation, data_provider, request_decider.ever_x_steps(1))

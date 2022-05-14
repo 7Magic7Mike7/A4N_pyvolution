@@ -12,9 +12,13 @@ class DataProvider(ABC):
     @abstractmethod
     def request_new_data(self) -> None:
         """
-        Readies data for next get_prepared_data() call.
+        Readies data for next get_raw_data() or get_prepared_data() call.
         :return: None
         """
+        pass
+
+    @abstractmethod
+    def get_raw_data(self) -> str:
         pass
 
     @abstractmethod
@@ -29,6 +33,10 @@ class DataProvider(ABC):
 class RandomDataProvider(DataProvider):
     def request_new_data(self) -> None:
         pass
+
+    def get_raw_data(self) -> str:
+        data = self.get_prepared_data()
+        return f"{data[0]}{data[1]}{data[2]}"
 
     def get_prepared_data(self) -> Tuple[int, int, int]:
         r = random.randint(0, 255)
@@ -57,6 +65,9 @@ class FileDataProvider(DataProvider):
         if self.__index >= len(self.__data):
             self.__index = 0
 
+    def get_raw_data(self) -> str:
+        return self.__data[self.__index]
+
     def get_prepared_data(self) -> Tuple[int, int, int]:
         cur_dat = self.__data[self.__index]
         parts = cur_dat.split(" ")
@@ -81,6 +92,14 @@ class ServerDataProvider(DataProvider):
 
         if self.__buffer[self.__index] is None:
             self.__fill_buffer(start=self.__index, num=min(self.__BUFFER_HALF_SIZE, len(self.__buffer) - self.__index))
+
+    def get_raw_data(self) -> str:
+        data = self.__buffer[self.__index]
+        if data:
+            self.__buffer[self.__index] = None
+            return data
+        else:
+            return ""
 
     def get_prepared_data(self) -> Tuple[int, int, int]:
         # todo prepare data to the needed output

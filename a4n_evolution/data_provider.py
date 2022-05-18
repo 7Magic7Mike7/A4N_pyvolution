@@ -31,6 +31,10 @@ class DataProvider(ABC):
 
 
 class RandomDataProvider(DataProvider):
+    def __init__(self, seed: int = 7):
+        super(RandomDataProvider, self).__init__()
+        self.__rand = random.Random(seed)
+
     def request_new_data(self) -> None:
         pass
 
@@ -39,9 +43,9 @@ class RandomDataProvider(DataProvider):
         return f"{data[0]}{data[1]}{data[2]}"
 
     def get_prepared_data(self) -> Tuple[int, int, int]:
-        r = random.randint(0, 255)
-        g = random.randint(0, 255)
-        b = random.randint(0, 255)
+        r = self.__rand.randint(0, 255)
+        g = self.__rand.randint(0, 255)
+        b = self.__rand.randint(0, 255)
         return r, g, b
 
 

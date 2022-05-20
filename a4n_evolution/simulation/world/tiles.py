@@ -21,7 +21,13 @@ class Tile(ABC):
         return self._pos
 
     @abstractmethod
-    def update(self, get_tile: Callable[[Optional[Coordinate], Optional[int], Optional[int]], Optional["Tile"]]):
+    def update(self, get_tile: Callable[[Optional[Coordinate], Optional[int], Optional[int]], Optional["Tile"]]) \
+            -> bool:
+        """
+
+        :param get_tile:
+        :return: True if the Tile is still alive, False if it "died" in this update
+        """
         pass
 
     @abstractmethod

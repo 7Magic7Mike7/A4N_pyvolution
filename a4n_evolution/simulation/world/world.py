@@ -5,10 +5,30 @@ from a4n_evolution.simulation.world.tiles import Tile
 
 
 class World:
+    @staticmethod
+    def __versus(t1: Optional[Tile], t2: Optional[Tile]) -> bool:
+        """
+        Let's to tiles compete with each other (e.g. if they both won't to be located on the same position).
+        :param t1:
+        :param t2:
+        :return: True if t1 wins, False if t2 wins
+        """
+        if t1 is None:
+            return False
+        return True     # currently always the "new" one wins
+
+    @staticmethod
+    def __coordinate(c: Optional[Coordinate], x: Optional[int], y: Optional[int]) -> Coordinate:
+        if c is not None:
+            return c
+        if x is None or y is None:
+            raise RuntimeError("Not enough parameter provided to determine a position!")
+        return Coordinate(x, y)
+
     def __init__(self, size: int):
         self.__width = size
         self.__height = size
-        self.__grid = [[None] * self.__width for _ in range(self.__height)]  # stores tiles
+        self.__world = {}
 
     @property
     def width(self) -> int:
@@ -31,48 +51,37 @@ class World:
         return False
 
     def get(self, c: Coordinate = None, x: int = None, y: int = None) -> Optional[Tile]:
-        if c:
-            x = c.x
-            y = c.y
-        elif x is None or y is None:
-            raise RuntimeError("Not enough parameter provided to determine a position!")
-
-        if self.validate_position(x=x, y=y):
-            return self.__grid[y][x]
+        c = World.__coordinate(c, x, y)
+        if self.validate_position(c=c):
+            if c in self.__world:
+                return self.__world[c]
+            return None
         else:
             raise IndexError(f"{c} is not a valid position!")
-
-    def get_neighbors(self, c: Coordinate, perception_range: int = 1) -> List[List[Tile]]:
-        neighbors = [[]]
-        for r in range(perception_range):
-            pass
-        return neighbors
 
     def set(self, tile: Tile):
         if self.validate_position(c=tile.pos):
-            self.__grid[tile.pos.y][tile.pos.x] = tile
+            if tile.pos in self.__world:
+                if self.__versus(tile, self.__world[tile.pos]):
+                    self.__world[tile.pos] = tile
+            else:
+                if self.__versus(tile, None):
+                    self.__world[tile.pos] = tile
         else:
             raise IndexError(f"{tile.pos} is not a valid position!")
 
-    def reset(self, c: Coordinate = None, x: int = None, y: int = None):
-        if c:
-            x = c.x
-            y = c.y
-        elif x is None or y is None:
-            raise RuntimeError("Not enough parameter provided to determine a position!")
-
-        if self.validate_position(x=x, y=y):
-            self.__grid[y][x] = None
-        else:
-            raise IndexError(f"{c} is not a valid position!")
-
-    def __iter__(self) -> Iterable[Iterable[Optional[Tile]]]:
-        return self.__grid
+    def update(self):
+        new_world = {}
+        for tile in self.__world.values():
+            if tile.update(self.get):
+                new_world[tile.pos] = tile
+        self.__world = new_world
 
     def print(self):
         str_rep = ""
-        for row in self.__grid:
-            for tile in row:
+        for y in range(self.__height):
+            for x in range(self.__width):
+                tile = self.get(x=x, y=y)
                 if tile:
                     str_rep += tile.to_string()
                 else:

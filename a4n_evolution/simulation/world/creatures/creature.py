@@ -28,7 +28,7 @@ class Creature(Tile):
     def age(self) -> int:
         return self.__age
 
-    def update(self, get_tile: Callable[[Optional[Coordinate], Optional[int], Optional[int]], Optional["Tile"]]):
+    def update(self, get_tile: Callable[[Optional[Coordinate], Optional[int], Optional[int]], Optional[Tile]]) -> bool:
         self.__age += 1
 
         lcd = 0
@@ -55,9 +55,10 @@ class Creature(Tile):
         data = data[:Genome.NUM_OF_SENSORS]     # todo remove later to use all data
         output = self.__brain.think(np.array(data))
         driven_actuator = np.where(output == np.amax(output))
-        print(f"Output = {output}")
         self.__take_action(driven_actuator[0][0])
         self.__energy -= np.sum(output)
+
+        return self.__energy > 0
 
     def __take_action(self, actuator: int):
         if actuator == 0:       # turn left
@@ -79,13 +80,6 @@ class Creature(Tile):
             self._pos = new_pos
             return True
         return False
-
-    def place(self, world: World) -> bool:
-        if world.get(self.pos) is None:
-            world.set(self)
-            return True
-        else:
-            return False
 
     def to_string(self) -> str:
         return "C"

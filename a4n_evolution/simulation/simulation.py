@@ -31,16 +31,12 @@ class Simulation(ABC):
 
 class SimpleSimulation(Simulation):
     def process_step(self):
-        for y in range(self._world.height):
-            for x in range(self._world.width):
-                tile = self._world.get(x=x, y=y)
-                if tile:
-                    tile.update(self._world.get)
+        self._world.update()
 
     def populate(self, data: str):
         start_pos = Coordinate(int(self._world.width / 2), int(self._world.height / 2))
         creature = Creature(data, start_pos, Direction.North, self._world.width, self._world.height)
-        creature.place(self._world)
+        self._world.set(creature)
 
     def to_channel_triple(self) -> Tuple[int, int, int]:
         self._world.print()

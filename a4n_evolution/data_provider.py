@@ -3,9 +3,7 @@ import os
 import random
 import requests
 from abc import ABC, abstractmethod
-from typing import Tuple, List, Callable
-
-from a4n_evolution.simulation.simulation import Simulation, SimpleSimulation
+from typing import Tuple, List
 
 
 class DataProvider(ABC):

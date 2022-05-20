@@ -42,7 +42,7 @@ class Genome:
         # sum = 85 digits
         index = 0
         cur_gene = int(data[index:index+Genome.GENE_LENGTH])
-        self.__max_energy = cur_gene % 100
+        self.__max_energy = 50 + cur_gene % 30
         index += Genome.GENE_LENGTH
 
         while index + Genome.GENE_LENGTH <= len(data):

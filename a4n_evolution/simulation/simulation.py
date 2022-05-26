@@ -39,5 +39,6 @@ class SimpleSimulation(Simulation):
         self._world.set(creature)
 
     def to_channel_triple(self) -> Tuple[int, int, int]:
-        self._world.print()
+        #self._world.print()
+        self._world.plot()
         return 0, 0, 0

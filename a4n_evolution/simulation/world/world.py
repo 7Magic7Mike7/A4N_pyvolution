@@ -1,4 +1,7 @@
-from typing import Optional, Iterable, List
+from typing import Optional
+
+import matplotlib.colors
+from matplotlib import pyplot as plt
 
 from util.navigation import Coordinate
 from a4n_evolution.simulation.world.tiles import Tile
@@ -29,6 +32,10 @@ class World:
         self.__width = size
         self.__height = size
         self.__world = {}
+
+        self.__fig, self.__ax = plt.subplots()
+        self.__ax.set_xlim([-0.5, self.width + 0.5])
+        self.__ax.set_ylim([-0.5, self.height + 0.5])
 
     @property
     def width(self) -> int:
@@ -88,3 +95,16 @@ class World:
                     str_rep += "_"
             str_rep += "\n"
         print(str_rep)
+
+    def plot(self):
+        #self.__fig.clear()
+        #self.__ax.grid(True)
+
+        cmap = {}
+        for i, tile in enumerate(self.__world.values()):
+            #cmap[i] = matplotlib.colors.hsv_to_rgb(tile.color())
+            self.__ax.scatter(x=tile.pos.x, y=tile.pos.y, c=i, cmap="Greens_r")
+
+        if len(cmap) > 0:
+            debug = True
+        print(f"#Inhabitants = {len(self.__world.values())}")

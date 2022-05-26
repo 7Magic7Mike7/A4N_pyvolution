@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Callable, Optional
+from typing import Callable, Optional, Tuple
 
 from util.navigation import Coordinate
 
@@ -19,6 +19,13 @@ class Tile(ABC):
     @property
     def pos(self) -> Coordinate:
         return self._pos
+
+    def color(self) -> Tuple[float, float, float]:
+        """
+
+        :return: HSV color, all parts in [0, 1]
+        """
+        return 0, 0, 0  # black
 
     @abstractmethod
     def update(self, get_tile: Callable[[Optional[Coordinate], Optional[int], Optional[int]], Optional["Tile"]]) \

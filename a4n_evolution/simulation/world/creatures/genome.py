@@ -28,7 +28,9 @@ class Genome:
         self.__h2h = np.zeros(shape=(Genome.NUM_OF_NEURONS, Genome.NUM_OF_NEURONS))
         self.__h2o = np.zeros(shape=(Genome.NUM_OF_NEURONS, Genome.NUM_OF_ACTUATORS))
 
-        # 8 elements i20, 12 elements i2h, 9 elements h2h, 6 elements h20 -> 25 elements for NN
+        self.__value = 0
+
+        # 8 elements i2o, 12 elements i2h, 9 elements h2h, 6 elements h2o -> 25 elements for NN
 
         # 5 digits make up a gene because 2^16 = 65 536
         # genome encoding:
@@ -37,7 +39,7 @@ class Genome:
         #       - 6 bit weight (-32...+32 normalized to -1.0...1.0)
         # if we have 16 genes for the brain, we would need 80 digits
 
-        # 5 digits = 1 gene would for max_energy, aggression level, ???
+        # 5 digits = 1 gene for max_energy, aggression level, ???
 
         # sum = 85 digits
         index = 0
@@ -49,6 +51,8 @@ class Genome:
             cur_gene = int(data[index:index+Genome.GENE_LENGTH])
             self.__create_brain_connection(cur_gene)
             index += Genome.GENE_LENGTH
+
+            self.__value += (cur_gene / 10**Genome.GENE_LENGTH)
         test = True
 
     def __create_brain_connection(self, cur_gene: int):
@@ -96,6 +100,10 @@ class Genome:
     @property
     def hidden_to_out(self) -> np.mat:
         return self.__h2o
+
+    @property
+    def value(self) -> float:
+        return self.__value
 
 
 class Brain:

@@ -1,4 +1,4 @@
-from typing import Callable, Optional
+from typing import Callable, Optional, Tuple
 
 import numpy as np
 
@@ -27,6 +27,12 @@ class Creature(Tile):
     @property
     def age(self) -> int:
         return self.__age
+
+    def color(self) -> Tuple[float, float, float]:
+        hue = self.__genome.value
+        saturation = 0.2 + 0.8 * (self.__energy / self.__genome.max_energy)
+        value = 0.5 + 0.5 * np.tanh(self.__age)
+        return hue, saturation, value
 
     def update(self, get_tile: Callable[[Optional[Coordinate], Optional[int], Optional[int]], Optional[Tile]]) -> bool:
         self.__age += 1

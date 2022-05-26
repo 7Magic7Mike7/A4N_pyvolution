@@ -1,3 +1,5 @@
+import datetime
+import os
 from typing import Optional
 
 import matplotlib.colors
@@ -5,9 +7,12 @@ from matplotlib import pyplot as plt
 
 from util.navigation import Coordinate
 from a4n_evolution.simulation.world.tiles import Tile
+from util.util_functions import hsv_to_rgb
 
 
 class World:
+    __BASE_PATH = os.path.join("data", "plots")
+
     @staticmethod
     def __versus(t1: Optional[Tile], t2: Optional[Tile]) -> bool:
         """
@@ -34,8 +39,10 @@ class World:
         self.__world = {}
 
         self.__fig, self.__ax = plt.subplots()
-        self.__ax.set_xlim([-0.5, self.width + 0.5])
-        self.__ax.set_ylim([-0.5, self.height + 0.5])
+        self.__file_prefix = str(datetime.datetime.now()).replace(":", "_")
+        self.__file_index = 0
+
+        os.mkdir(os.path.join(World.__BASE_PATH, self.__file_prefix))
 
     @property
     def width(self) -> int:
@@ -96,15 +103,19 @@ class World:
             str_rep += "\n"
         print(str_rep)
 
-    def plot(self):
-        #self.__fig.clear()
+    def plot(self, save: bool = False):
         #self.__ax.grid(True)
+        self.__ax.clear()
+        self.__ax.set_xlim([-0.5, self.width + 0.5])
+        self.__ax.set_ylim([-0.5, self.height + 0.5])
 
-        cmap = {}
         for i, tile in enumerate(self.__world.values()):
-            #cmap[i] = matplotlib.colors.hsv_to_rgb(tile.color())
-            self.__ax.scatter(x=tile.pos.x, y=tile.pos.y, c=i, cmap="Greens_r")
+            color = tile.color()
+            color = hsv_to_rgb(color[0], color[1], color[2])
+            color = f"#{'%02x%02x%02x' % (color[0], color[1], color[2])}"
+            self.__ax.scatter(x=tile.pos.x, y=tile.pos.y, c=color)
 
-        if len(cmap) > 0:
-            debug = True
-        print(f"#Inhabitants = {len(self.__world.values())}")
+        if save:
+            path = os.path.join(World.__BASE_PATH, self.__file_prefix, str(self.__file_index))
+            self.__fig.savefig(path)
+            self.__file_index += 1

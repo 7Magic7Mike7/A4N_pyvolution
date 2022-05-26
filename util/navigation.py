@@ -37,6 +37,22 @@ class Direction(Enum):
     def values() -> "[Direction]":
         return [Direction.North, Direction.East, Direction.South, Direction.West]
 
+    @staticmethod
+    def to_float(direction: "Direction") -> float:
+        length = len(Direction.values())
+        value = 0   # Center (invalid)
+        if direction.x == 0:
+            if direction.y < 0:
+                value = 1
+            elif direction.y > 0:
+                value = 3
+        elif direction.y == 0:
+            if direction.x > 0:
+                value = 2
+            elif direction.x < 0:
+                value = 4
+        return value / length
+
     @property
     def x(self) -> int:
         return self.__x

@@ -6,7 +6,7 @@ import torch
 
 
 class Genome:
-    NUM_OF_SENSORS = 4
+    NUM_OF_SENSORS = 6
     NUM_OF_NEURONS = 3
     NUM_OF_ACTUATORS = 6
     GENE_LENGTH = 5

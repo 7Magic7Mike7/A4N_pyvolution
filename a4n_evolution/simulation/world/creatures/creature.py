@@ -31,7 +31,15 @@ class Creature(Tile):
     def color(self) -> Tuple[float, float, float]:
         hue = self.__genome.value
         saturation = 0.2 + 0.8 * (self.__energy / self.__genome.max_energy)
-        value = 0.5 + 0.5 * np.tanh(self.__age)
+        value = 0.4 + 0.6 - 0.6 * np.tanh(self.__age * 0.1)
+
+        if hue < 0 or 360 <= hue:
+            raise ValueError(f"Illegal value for hue: {hue}")
+        if saturation < 0 or 1.0 < saturation:
+            raise ValueError(f"Illegal value for saturation: {saturation}")
+        if value < 0 or 1.0 < value:
+            raise ValueError(f"Illegal value for value: {value}")
+
         return hue, saturation, value
 
     def update(self, get_tile: Callable[[Optional[Coordinate], Optional[int], Optional[int]], Optional[Tile]]) -> bool:
@@ -54,15 +62,18 @@ class Creature(Tile):
 
         # inputs need to be between 0 and 1
         data = [
-            np.tanh(self.__age), self.__energy / self.__genome.max_energy,
-            self.pos.x / self.__world_width, self.pos.y / self.__world_height, self.__orientation,
+            np.tanh(self.__age),
+            self.__energy / self.__genome.max_energy,
+            self.pos.x / self.__world_width,
+            self.pos.y / self.__world_height,
+            Direction.to_float(self.__orientation),
             lcd,
         ]
         data = data[:Genome.NUM_OF_SENSORS]     # todo remove later to use all data
         output = self.__brain.think(np.array(data))
         driven_actuator = np.where(output == np.amax(output))
         self.__take_action(driven_actuator[0][0])
-        self.__energy -= np.sum(output)
+        self.__energy -= abs(np.sum(output))
 
         return self.__energy > 0
 

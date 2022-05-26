@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from random import Random
 from typing import Tuple
 
 from a4n_evolution.simulation.world import World
@@ -30,11 +31,18 @@ class Simulation(ABC):
 
 
 class SimpleSimulation(Simulation):
+    def __init__(self, seed: int = 7):
+        super().__init__()
+        self.__rand = Random(seed)
+
     def process_step(self):
         self._world.update()
 
     def populate(self, data: str):
-        start_pos = Coordinate(int(self._world.width / 2), int(self._world.height / 2))
+        start_pos = Coordinate(
+            self.__rand.randint(0, self._world.width - 1),
+            self.__rand.randint(0, self._world.height - 1)
+        )
         creature = Creature(data, start_pos, Direction.North, self._world.width, self._world.height)
         self._world.set(creature)
 

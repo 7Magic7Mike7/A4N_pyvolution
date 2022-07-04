@@ -3,7 +3,7 @@ import os
 import random
 import requests
 from abc import ABC, abstractmethod
-from typing import Tuple, List
+from typing import Tuple, List, Optional
 
 
 class DataProvider(ABC):
@@ -82,18 +82,22 @@ class ServerDataProvider(DataProvider):
     __NO_DATA = (0, 0, 0)
 
     def __init__(self, sim_id: int):
-        self.__buffer = [None] * (self.__BUFFER_HALF_SIZE * 2)
+        self.__buffer: List[Optional[str]] = [None] * (self.__BUFFER_HALF_SIZE * 2)
         self.__index = 0
         self.__sim_id = sim_id
-        self.__fill_buffer(start=0, num=len(self.__buffer))
+        self.__fill_buffer(start=0, num=self.__buffer_size)
+
+    @property
+    def __buffer_size(self) -> int:
+        return self.__BUFFER_HALF_SIZE * 2
 
     def request_new_data(self) -> None:
         self.__index += 1
-        if self.__index >= len(self.__buffer):
+        if self.__index >= self.__buffer_size:
             self.__index = 0
 
         if self.__buffer[self.__index] is None:
-            self.__fill_buffer(start=self.__index, num=min(self.__BUFFER_HALF_SIZE, len(self.__buffer) - self.__index))
+            self.__fill_buffer(start=self.__index, num=min(self.__BUFFER_HALF_SIZE, self.__buffer_size - self.__index))
 
     def get_raw_data(self) -> str:
         data = self.__buffer[self.__index]
@@ -118,7 +122,7 @@ class ServerDataProvider(DataProvider):
     def __fill_buffer(self, start: int, num: int = __BUFFER_HALF_SIZE):
         new_data = self.__http_get(num)
         for i in range(num):
-            if start + i >= len(self.__buffer) or i >= len(new_data) or new_data[i] is None:
+            if start + i >= self.__buffer_size or i >= len(new_data) or new_data[i] is None:
                 break
             # print(f"filled buffer at {start + i}")
             self.__buffer[start + i] = new_data[i]

@@ -3,6 +3,7 @@ from typing import Callable, Tuple
 from a4n_evolution.data_provider import DataProvider, RandomDataProvider, ServerDataProvider
 from a4n_evolution.simulation.request_decider import RequestDecider
 from a4n_evolution.simulation.simulation import Simulation, SimpleSimulation
+from a4n_evolution.simulation.world.creatures.genome import Genome
 from util.config import Config
 
 
@@ -26,9 +27,12 @@ class EvolutionSimulationDataProvider(DataProvider):
     def get_prepared_data(self) -> Tuple[int, int, int]:
         if self.__new_data_available:
             data = self.__base_data_provider.get_raw_data()
-            while len(data) < 90:
+            if len(data) == 0:
+                raise Exception("Data not available!!!")
+            data_length = Genome.GENE_LENGTH * Genome.NUM_OF_GENES
+            while len(data) < data_length:
                 data += data
-            data = data[:90]
+            data = data[:data_length]
             self.__simulation.populate(data)
             self.__new_data_available = False
         return self.__simulation.to_channel_triple()

@@ -30,10 +30,13 @@ class Simulation(ABC):
 
 
 class SimpleSimulation(Simulation):
+    __STEPS_PER_PLOT = 10
+
     def __init__(self, seed: int = 7):
         super().__init__()
         self.__rand = Random(seed)
         Creature.set_world_dimension(self._world.width, self._world.height)
+        self.__plot_counter = 0
 
     def process_step(self):
         self._world.update()
@@ -54,6 +57,7 @@ class SimpleSimulation(Simulation):
         self._world.place(food)
 
     def to_channel_triple(self) -> Tuple[int, int, int]:
-        #self._world.print()
-        self._world.plot()
+        # self._world.print()
+        self.__plot_counter += 1
+        self._world.plot(save=self.__plot_counter % SimpleSimulation.__STEPS_PER_PLOT == 0)
         return 0, 0, 0

@@ -69,8 +69,6 @@ class World:
         self.__file_prefix = str(datetime.datetime.now()).replace(":", "_")
         self.__file_index = 0
 
-        os.mkdir(os.path.join(World.__BASE_PATH, self.__file_prefix))
-
     @property
     def width(self) -> int:
         return self.__width
@@ -143,6 +141,9 @@ class World:
             self.__ax.scatter(x=tile.pos.x, y=tile.pos.y, c=color)
 
         if save:
-            path = os.path.join(World.__BASE_PATH, self.__file_prefix, str(self.__file_index))
+            dir_path = os.path.join(World.__BASE_PATH, self.__file_prefix)
+            if not os.path.exists(dir_path):
+                os.mkdir(dir_path)
+            path = os.path.join(dir_path, str(self.__file_index))
             self.__fig.savefig(path)
             self.__file_index += 1

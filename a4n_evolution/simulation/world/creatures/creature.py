@@ -4,6 +4,7 @@ import numpy as np
 
 from a4n_evolution.simulation.world.tiles import Tile
 from a4n_evolution.simulation.world.creatures.genome import Genome, Brain
+from util.config import Config
 from util.navigation import Coordinate, Direction
 
 
@@ -165,7 +166,7 @@ class Creature(Tile):
 
 
 class Egg(Tile):
-    __INCUBATION_TIME = 3
+    __INCUBATION_TIME = Config.egg_incubation_time()
 
     def __init__(self, pos: Coordinate, orientation: Direction, mother: Creature, father: Creature):
         super().__init__(pos)

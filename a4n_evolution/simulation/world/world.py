@@ -6,6 +6,7 @@ from matplotlib import pyplot as plt
 
 from a4n_evolution.simulation.world.tiles import Tile, Food
 from a4n_evolution.simulation.world.creatures import Creature, Egg
+from util.config import Config
 from util.navigation import Coordinate
 from util.util_functions import hsv_to_rgb
 
@@ -140,7 +141,7 @@ class World:
             color = f"#{'%02x%02x%02x' % (color[0], color[1], color[2])}"
             self.__ax.scatter(x=tile.pos.x, y=tile.pos.y, c=color)
 
-        if save:
+        if save and Config.save_data():
             dir_path = os.path.join(World.__BASE_PATH, self.__file_prefix)
             if not os.path.exists(dir_path):
                 os.mkdir(dir_path)

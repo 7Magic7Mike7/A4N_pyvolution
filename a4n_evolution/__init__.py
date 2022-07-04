@@ -1,6 +1,8 @@
 import os
 
 from matplotlib import animation, pyplot as plt
+
+from util.config import Config
 from .interface import Interface
 
 
@@ -17,4 +19,5 @@ def create_animated_plot():
     Interface.init()
     anim = animation.FuncAnimation(plt.gcf(), get_data_wrapper, frames=100, interval=250, repeat=False)
     plt.show()
-    anim.save(os.path.join("data", "animated_plot.gif"))
+    if Config.save_data():
+        anim.save(os.path.join("data", "animated_plot.gif"))

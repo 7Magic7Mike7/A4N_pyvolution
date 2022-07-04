@@ -5,6 +5,8 @@ import requests
 from abc import ABC, abstractmethod
 from typing import Tuple, List, Optional
 
+from a4n_evolution.simulation.world.creatures.genome import Genome
+
 
 class DataProvider(ABC):
     @abstractmethod
@@ -37,8 +39,13 @@ class RandomDataProvider(DataProvider):
         pass
 
     def get_raw_data(self) -> str:
-        data = self.get_prepared_data()
-        return f"{data[0]}{data[1]}{data[2]}"
+        # data = self.get_prepared_data()
+        # return f"{data[0]}{data[1]}{data[2]}"
+        data = ""
+        for i in range(Genome.NUM_OF_GENES):
+            value = self.__rand.randint(0, 10**Genome.GENE_LENGTH)
+            data += format(value, f"0{Genome.GENE_LENGTH}d")
+        return data
 
     def get_prepared_data(self) -> Tuple[int, int, int]:
         r = self.__rand.randint(0, 255)

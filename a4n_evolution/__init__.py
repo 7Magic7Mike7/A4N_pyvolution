@@ -17,7 +17,8 @@ def create_animated_plot():
         Interface.get_data()
 
     Interface.init()
-    anim = animation.FuncAnimation(plt.gcf(), get_data_wrapper, frames=100, interval=250, repeat=False)
+    anim = animation.FuncAnimation(plt.gcf(), get_data_wrapper, frames=Config.num_of_frames(),
+                                   interval=Config.interval(), repeat=False)
     plt.show()
     if Config.save_data():
         anim.save(os.path.join("data", "animated_plot.gif"))

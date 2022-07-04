@@ -46,7 +46,8 @@ class SimpleSimulation(Simulation):
             self.__rand.randint(0, self._world.width - 1),
             self.__rand.randint(0, self._world.height - 1)
         )
-        creature = Creature.create(data, start_pos, Direction.North)
+        creature = Creature.create(data, start_pos, Direction.North, world_width=self._world.width,
+                                   world_height=self._world.height)
         self._world.place(creature)
 
         start_pos = Coordinate(

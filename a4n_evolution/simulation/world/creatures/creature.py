@@ -36,8 +36,8 @@ class Creature(Tile):
         return 0
 
     @staticmethod
-    def create(genome: str, pos: Coordinate, orientation: Direction, world_width: int = __World_Width,
-               world_height = __World_Height) -> "Creature":
+    def create(genome: str, pos: Coordinate, orientation: Direction, world_width: int,
+               world_height: int) -> "Creature":
         return Creature(Genome(genome), pos, orientation, world_width, world_height)
 
     def __init__(self, genome: Genome, pos: Coordinate, orientation: Direction, world_width: int = __World_Width,
@@ -64,7 +64,7 @@ class Creature(Tile):
     def __validate_pos(self, pos: Coordinate) -> bool:
         if pos is None:
             return False
-        return 0 <= pos.x < self.__world_width and 0 <= pos.y < self.__World_Height
+        return 0 <= pos.x < self.__world_width and 0 <= pos.y < self.__world_height
 
     def color(self) -> Tuple[float, float, float]:
         hue = self.__genome.value * 360

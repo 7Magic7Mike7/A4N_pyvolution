@@ -120,15 +120,17 @@ class ServerDataProvider(DataProvider):
         for i in range(num):
             if start + i >= len(self.__buffer) or i >= len(new_data) or new_data[i] is None:
                 break
-            print(f"filled buffer at {start + i}")
+            # print(f"filled buffer at {start + i}")
             self.__buffer[start + i] = new_data[i]
 
     def __http_get(self, num: int = __BUFFER_HALF_SIZE) -> List[str]:
         response = requests.get(
-            f'https://arsfornons.glitch.me/retrieve?'
+            f'https://a4n-test.herokuapp.com/'
+            f'retrieve?'
             f'simId={self.__sim_id}'
             '&'
             f'num={num}'
         )
-        data = json.loads(response.text)["data"]
+        data = json.loads(response.text)
+        data = data["data"]
         return data

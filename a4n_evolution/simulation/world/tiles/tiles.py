@@ -23,7 +23,7 @@ class Tile(ABC):
     def color(self) -> Tuple[float, float, float]:
         """
 
-        :return: HSV color, all parts in [0, 1]
+        :return: HSV color, hue in [0, 360[, saturation and value in [0, 1.0]
         """
         return 0, 0, 0  # black
 
@@ -35,6 +35,10 @@ class Tile(ABC):
         :param get_tile:
         :return: True if the Tile is still alive, False if it "died" in this update
         """
+        pass
+
+    @abstractmethod
+    def produced(self) -> Optional["Tile"]:
         pass
 
     @abstractmethod

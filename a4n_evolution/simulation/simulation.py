@@ -2,8 +2,7 @@ from abc import ABC, abstractmethod
 from random import Random
 from typing import Tuple
 
-from a4n_evolution.simulation.world import World
-from a4n_evolution.simulation.world.creatures import Creature
+from a4n_evolution.simulation.world import World, Food, Creature
 from util.navigation import Coordinate, Direction
 
 
@@ -34,6 +33,7 @@ class SimpleSimulation(Simulation):
     def __init__(self, seed: int = 7):
         super().__init__()
         self.__rand = Random(seed)
+        Creature.set_world_dimension(self._world.width, self._world.height)
 
     def process_step(self):
         self._world.update()
@@ -43,8 +43,15 @@ class SimpleSimulation(Simulation):
             self.__rand.randint(0, self._world.width - 1),
             self.__rand.randint(0, self._world.height - 1)
         )
-        creature = Creature(data, start_pos, Direction.North, self._world.width, self._world.height)
-        self._world.set(creature)
+        creature = Creature.create(data, start_pos, Direction.North)
+        self._world.place(creature)
+
+        start_pos = Coordinate(
+            self.__rand.randint(0, self._world.width - 1),
+            self.__rand.randint(0, self._world.height - 1)
+        )
+        food = Food(start_pos)
+        self._world.place(food)
 
     def to_channel_triple(self) -> Tuple[int, int, int]:
         #self._world.print()

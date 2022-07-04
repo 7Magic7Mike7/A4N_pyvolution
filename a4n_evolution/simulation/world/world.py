@@ -1,12 +1,12 @@
 import datetime
 import os
-from typing import Optional
+from typing import Optional, Dict
 
-import matplotlib.colors
 from matplotlib import pyplot as plt
 
+from a4n_evolution.simulation.world.tiles import Tile, Food
+from a4n_evolution.simulation.world.creatures import Creature, Egg
 from util.navigation import Coordinate
-from a4n_evolution.simulation.world.tiles import Tile
 from util.util_functions import hsv_to_rgb
 
 
@@ -23,7 +23,33 @@ class World:
         """
         if t1 is None:
             return False
-        return True     # currently always the "new" one wins
+
+        if t2 is not None:
+            if isinstance(t1, Egg):
+                return isinstance(t2, Food) # eggs only win against food
+
+            if isinstance(t1, Creature):
+                if isinstance(t2, Food):
+                    t1.eat(t2)
+                elif isinstance(t2, Creature):
+                    pass    # todo implement fighting?
+                # todo eat eggs?
+            elif isinstance(t1, Food):
+                if isinstance(t2, Creature):
+                    t2.eat(t1)
+
+        return True     # by default the "new" one wins
+
+    @staticmethod
+    def __place(tile: Tile, world: Dict[Coordinate, "Tile"]):
+        if tile is None:
+            return
+        if tile.pos in world:
+            if World.__versus(tile, world[tile.pos]):
+                world[tile.pos] = tile
+        else:
+            if World.__versus(tile, None):
+                world[tile.pos] = tile
 
     @staticmethod
     def __coordinate(c: Optional[Coordinate], x: Optional[int], y: Optional[int]) -> Coordinate:
@@ -36,6 +62,7 @@ class World:
     def __init__(self, size: int):
         self.__width = size
         self.__height = size
+        self.__age = 0
         self.__world = {}
 
         self.__fig, self.__ax = plt.subplots()
@@ -73,23 +100,23 @@ class World:
         else:
             raise IndexError(f"{c} is not a valid position!")
 
-    def set(self, tile: Tile):
+    def place(self, tile: Tile):
         if self.validate_position(c=tile.pos):
-            if tile.pos in self.__world:
-                if self.__versus(tile, self.__world[tile.pos]):
-                    self.__world[tile.pos] = tile
-            else:
-                if self.__versus(tile, None):
-                    self.__world[tile.pos] = tile
+            World.__place(tile, self.__world)
         else:
             raise IndexError(f"{tile.pos} is not a valid position!")
 
     def update(self):
+        self.__age += 1
         new_world = {}
         for tile in self.__world.values():
             if tile.update(self.get):
-                new_world[tile.pos] = tile
+                World.__place(tile, new_world)
+                World.__place(tile.produced(), new_world)   # this will place nothing if tile.produced() returns None
         self.__world = new_world
+
+        if self.__age % 1000 == 999:
+            print(f"Age of world = {self.__age}")
 
     def print(self):
         str_rep = ""

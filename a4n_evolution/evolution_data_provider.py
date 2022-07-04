@@ -1,6 +1,6 @@
 from typing import Callable, Tuple
 
-from a4n_evolution.data_provider import DataProvider, RandomDataProvider
+from a4n_evolution.data_provider import DataProvider, RandomDataProvider, ServerDataProvider
 from a4n_evolution.simulation.request_decider import RequestDecider
 from a4n_evolution.simulation.simulation import Simulation, SimpleSimulation
 
@@ -37,6 +37,7 @@ class SimpleEvolSimDP(EvolutionSimulationDataProvider):
     def __init__(self):
         seed = 1088
         simulation = SimpleSimulation(seed)
-        data_provider = RandomDataProvider(seed)
+        #data_provider = RandomDataProvider(seed)
+        data_provider = ServerDataProvider(sim_id=0)
         request_decider = RequestDecider()
         super(SimpleEvolSimDP, self).__init__(simulation, data_provider, request_decider.ever_x_steps(3))

@@ -6,11 +6,12 @@ import torch
 
 
 class Genome:
-    NUM_OF_SENSORS = 6
+    NUM_OF_SENSORS = 7
     NUM_OF_NEURONS = 3
     NUM_OF_ACTUATORS = 6
     GENE_LENGTH = 5
     NUM_OF_GENES = 20
+    #MAX_VALUE = 10**(GENE_LENGTH * NUM_OF_GENES)
     __WEIGHT_SIZE = 6
     __TARGET_SIZE = 5
     __SOURCE_SIZE = 5
@@ -53,6 +54,8 @@ class Genome:
             index += Genome.GENE_LENGTH
 
             self.__value += (cur_gene / 10**Genome.GENE_LENGTH)
+
+        self.__value = np.tanh(self.__value)
         test = True
 
     def __create_brain_connection(self, cur_gene: int):
@@ -103,6 +106,10 @@ class Genome:
 
     @property
     def value(self) -> float:
+        """
+
+        :return: float in [0, 1.0]
+        """
         return self.__value
 
 

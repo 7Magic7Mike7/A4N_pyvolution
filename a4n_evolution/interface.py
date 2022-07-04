@@ -18,7 +18,7 @@ class Interface:
     def get_data():
         if not Interface.__is_initialized:
             Interface.init()
-        print(f"get_data() #{Interface.__counter}")
+        # print(f"get_data() #{Interface.__counter}")
         Interface.__counter += 1
 
         if Interface.__data_provider:

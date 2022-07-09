@@ -119,7 +119,7 @@ class World:
                 World.__place(tile.produced(), new_world)   # this will place nothing if tile.produced() returns None
         self.__world = new_world
 
-        if self.__age % 1000 == 999:
+        if self.__age % 100 == 0:
             print(f"Age of world = {self.__age}")
 
     def print(self):
@@ -135,7 +135,7 @@ class World:
         print(str_rep)
 
     def plot(self, save: bool = False):
-        #self.__ax.grid(True)
+        # self.__ax.grid(True)
         self.__ax.clear()
         self.__ax.set_xlim([-0.5, self.width + 0.5])
         self.__ax.set_ylim([-0.5, self.height + 0.5])

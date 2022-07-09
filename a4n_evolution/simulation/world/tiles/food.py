@@ -3,13 +3,17 @@ from typing import Callable, Optional, Tuple
 import numpy as np
 
 from a4n_evolution.simulation.world.tiles import Tile
+from util.config import Config
 from util.navigation import Coordinate
 
 
 class Food(Tile):
+    __SPOIL_TIME = Config.food_spoil_time()
+
     def __init__(self, pos: Coordinate, energy: float = 10):
         super().__init__(pos)
         self.__energy = energy
+        self.__age = 0
 
     @property
     def energy(self) -> float:
@@ -21,7 +25,8 @@ class Food(Tile):
 
     def update(self,
                get_tile: Callable[[Optional[Coordinate], Optional[int], Optional[int]], Optional["Tile"]]) -> bool:
-        return True
+        self.__age += 1
+        return self.__age < Food.__SPOIL_TIME
 
     def produced(self) -> Optional["Tile"]:
         return None

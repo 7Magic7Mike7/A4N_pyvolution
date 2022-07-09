@@ -141,7 +141,7 @@ class World:
             color = f"#{'%02x%02x%02x' % (color[0], color[1], color[2])}"
             self.__ax.scatter(x=tile.pos.x, y=tile.pos.y, c=color)
 
-        if save and Config.save_data():
+        if save and Config.save_plots():
             dir_path = os.path.join(World.__BASE_PATH, self.__file_prefix)
             if not os.path.exists(dir_path):
                 os.mkdir(dir_path)

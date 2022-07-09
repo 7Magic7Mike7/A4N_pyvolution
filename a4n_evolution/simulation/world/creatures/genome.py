@@ -4,6 +4,8 @@ from typing import List, Tuple
 import numpy as np
 import torch
 
+from util.config import Config
+
 
 class Genome:
     NUM_OF_SENSORS = 7
@@ -45,7 +47,7 @@ class Genome:
         # sum = 85 digits
         index = 0
         cur_gene = int(data[index:index+Genome.GENE_LENGTH])
-        self.__max_energy = 50 + cur_gene % 30
+        self.__max_energy = Config.min_max_energy() + cur_gene % Config.max_bonus_energy()
         index += Genome.GENE_LENGTH
 
         while index + Genome.GENE_LENGTH <= len(data):

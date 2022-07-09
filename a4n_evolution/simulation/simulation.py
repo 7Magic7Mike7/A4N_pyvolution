@@ -3,11 +3,12 @@ from random import Random
 from typing import Tuple
 
 from a4n_evolution.simulation.world import World, Food, Creature
+from util.config import Config
 from util.navigation import Coordinate, Direction
 
 
 class Simulation(ABC):
-    __SIZE = 10
+    __SIZE = Config.world_size()
 
     def __init__(self):
         self.__world = World(Simulation.__SIZE)
@@ -30,7 +31,7 @@ class Simulation(ABC):
 
 
 class SimpleSimulation(Simulation):
-    __STEPS_PER_PLOT = 10
+    __STEPS_PER_PLOT = Config.steps_per_plot()
 
     def __init__(self, seed: int = 7):
         super().__init__()

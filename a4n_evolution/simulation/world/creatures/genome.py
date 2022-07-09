@@ -18,11 +18,27 @@ class Genome:
     __TARGET_SIZE = 5
     __SOURCE_SIZE = 5
 
+    __rand = Random(Config.seed())
+
     @staticmethod
     def reproduce(mother: "Genome", father: "Genome") -> "Genome":
-        pass
+        genome = ""
+        for i in range(Genome.NUM_OF_GENES):
+            if Genome.__rand.random() < Config.mutation_chance():
+                child: int = Genome.__rand.randint(0, 10**Genome.GENE_LENGTH)
+            else:
+                gene_start = i * Genome.GENE_LENGTH
+                gene_end = (i+1) * Genome.GENE_LENGTH
+                m = int(mother.__data[gene_start:gene_end])
+                f = int(father.__data[gene_start:gene_end])
+
+                mom_ratio = Genome.__rand.random()
+                child: int = round(m * mom_ratio + f * (1.0 - mom_ratio))
+            genome += format(child, f"0{Genome.GENE_LENGTH}d")
+        return Genome(genome)
 
     def __init__(self, data: str):
+        self.__data = data
         self.__max_energy = 10   # two digits
         self.__aggression_level = 1     # 1 digit
 

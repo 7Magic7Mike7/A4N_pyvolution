@@ -38,22 +38,27 @@ class SimpleSimulation(Simulation):
         self.__rand = Random(seed)
         Creature.set_world_dimension(self._world.width, self._world.height)
         self.__plot_counter = 0
+        self.__populate_counter = 0
+
 
     def process_step(self):
         self._world.update()
 
     def populate(self, data: str):
-        start_pos = Coordinate(
-            self.__rand.randint(0, self._world.width - 1),
-            self.__rand.randint(0, self._world.height - 1)
-        )
-        creature = Creature.create(data, start_pos, Direction.North, world_width=self._world.width,
-                                   world_height=self._world.height)
-        self._world.place(creature)
+        self.__populate_counter += 1
+
+        if self.__populate_counter % 2 == 0:
+            start_pos = Coordinate(
+                self.__rand.randint(0, self._world.width - 1),
+                self.__rand.randint(0, self._world.height - 1)
+            )
+            creature = Creature.create(data, start_pos, Direction.North, world_width=self._world.width,
+                                       world_height=self._world.height)
+            self._world.place(creature)
 
         start_pos = Coordinate(
-            self.__rand.randint(0, self._world.width - 1),
-            self.__rand.randint(0, self._world.height - 1)
+            self.__rand.randint(round(self._world.width * 0.25), round(self._world.width * 0.75)),
+            self.__rand.randint(round(self._world.height * 0.25), round(self._world.height * 0.75)),
         )
         food = Food(start_pos)
         self._world.place(food)

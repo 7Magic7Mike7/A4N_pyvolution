@@ -62,10 +62,10 @@ class Creature(Tile):
     def age(self) -> int:
         return self.__age
 
-    def __validate_pos(self, pos: Coordinate) -> bool:
-        if pos is None:
-            return False
-        return 0 <= pos.x < self.__world_width and 0 <= pos.y < self.__world_height
+    def __validate_pos(self, pos: Coordinate) -> Coordinate:
+        assert pos is not None
+
+        return Coordinate(pos.x % self.__world_width, pos.y % self.__world_height)
 
     def color(self) -> Tuple[float, float, float]:
         hue = self.__genome.value * 360
@@ -99,10 +99,8 @@ class Creature(Tile):
                     lcd += 1
         lcd = lcd / dist**2     # with trigonometry we can see that the covered area is distance squared
 
-        if self.__validate_pos(self.pos + self.__orientation):
-            mate_tile = get_tile(self.pos + self.__orientation, None, None)
-        else:
-            mate_tile = None
+        pos = self.__validate_pos(self.pos + self.__orientation)
+        mate_tile = get_tile(pos, None, None)
         mate_ready = Creature.mateability(self, mate_tile)
 
         # inputs need to be between 0 and 1
@@ -147,16 +145,20 @@ class Creature(Tile):
         else:
             direction = self.__orientation.turn_right()
         new_pos = self._pos + direction
-        if self.__validate_pos(new_pos):
-            self._pos = new_pos
-            return True
-        return False
+        self._pos = self.__validate_pos(new_pos)
+        return True
 
     def __mate(self, mate_tile: "Creature"):
-        self.__egg = Egg(self.pos, self.__orientation.opposite(), self, mate_tile)
+        egg_pos = self.__validate_pos(self.pos + self.__orientation.opposite())
+        self.__egg = Egg(egg_pos, self.__orientation.opposite(), self, mate_tile)
 
     def produced(self) -> Optional["Tile"]:
-        return self.__egg
+        if self.__egg is None:
+            return None
+        else:
+            egg = self.__egg
+            self.__egg = None
+            return egg
 
     def eat(self, food):
         self.__energy = min(self.__energy + food.energy, self.genome.max_energy)
@@ -187,7 +189,7 @@ class Egg(Tile):
 
     def update(self, get_tile: Callable[[Optional[Coordinate], Optional[int], Optional[int]], Optional["Tile"]]):
         self.__age += 1
-        return self.__age < Egg.__INCUBATION_TIME
+        return self.__age <= Egg.__INCUBATION_TIME
 
     def produced(self) -> Optional["Tile"]:
         if self.__age >= Egg.__INCUBATION_TIME:

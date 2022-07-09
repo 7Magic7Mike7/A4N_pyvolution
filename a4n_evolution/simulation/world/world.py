@@ -1,6 +1,6 @@
 import datetime
 import os
-from typing import Optional, Dict
+from typing import Optional, Dict, Tuple
 
 from matplotlib import pyplot as plt
 
@@ -78,7 +78,14 @@ class World:
     def height(self) -> int:
         return self.__height
 
-    def validate_position(self, c: Coordinate = None, x: int = None, y: int = None) -> bool:
+    def validate_position(self, c: Coordinate = None, x: int = None, y: int = None) -> Tuple[bool, Coordinate]:
+        """
+        Corrects the position in a sphere-like manner. E.g. if x is one space larger than width it will start back at 0.
+        :param c:
+        :param x:
+        :param y:
+        :return: True and c if c did not have to be adapted, False and a validated version of c otherwise
+        """
         if c:
             x = c.x
             y = c.y
@@ -87,20 +94,18 @@ class World:
 
         if 0 <= x < self.__width:
             if 0 <= y < self.__height:
-                return True
-        return False
+                return True, Coordinate(x, y)
+        return False, Coordinate(x % self.width, y % self.width)
 
     def get(self, c: Coordinate = None, x: int = None, y: int = None) -> Optional[Tile]:
         c = World.__coordinate(c, x, y)
-        if self.validate_position(c=c):
-            if c in self.__world:
-                return self.__world[c]
-            return None
-        else:
-            raise IndexError(f"{c} is not a valid position!")
+        _, c = self.validate_position(c=c)
+        if c in self.__world:
+            return self.__world[c]
+        return None
 
     def place(self, tile: Tile):
-        if self.validate_position(c=tile.pos):
+        if self.validate_position(c=tile.pos)[0]:
             World.__place(tile, self.__world)
         else:
             raise IndexError(f"{tile.pos} is not a valid position!")

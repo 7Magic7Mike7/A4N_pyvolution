@@ -64,7 +64,7 @@ class World:
         self.__width = size
         self.__height = size
         self.__age = 0
-        self.__world = {}
+        self.__world: Dict[Tile] = {}
 
         self.__fig, self.__ax = plt.subplots()
         self.__file_prefix = str(datetime.datetime.now()).replace(":", "_")

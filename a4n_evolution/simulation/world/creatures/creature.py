@@ -25,8 +25,8 @@ class Creature(Tile):
     def mateability(creature: "Creature", mate_tile: Tile) -> float:
         """
         Calculates how well the creatures can mate with each other.
-        :param c1:
-        :param c2:
+        :param creature:
+        :param mate_tile:
         :return: value in [0, 1.0]
         """
         if mate_tile is None:
@@ -117,11 +117,11 @@ class Creature(Tile):
         output = self.__brain.think(np.array(data))
         driven_actuator = np.where(output == np.amax(output))[0][0]
 
-        #self.__take_action(driven_actuator[0][0], mate_ready > 0.5)
+        # self.__take_action(driven_actuator[0][0], mate_ready > 0.5)
         if driven_actuator in [0, 1]:
             self.__turn(driven_actuator)
         elif driven_actuator in [2, 3, 4, 5]:
-            if mate_ready:  # mate_ready implies that mate_tile is a Creature
+            if mate_ready is not None:  # mate_ready implies that mate_tile is a Creature
                 self.__mate(mate_tile)
             else:
                 self.__move(driven_actuator)
@@ -192,7 +192,7 @@ class Egg(Tile):
     def produced(self) -> Optional["Tile"]:
         if self.__age >= Config.instance().egg_incubation_time:
             self.__born_creature = Creature(self.__genome, self.pos, self.__orientation)
-            print("A creature was born!")
+            # print("A creature was born!")
         return self.__born_creature
 
     def to_string(self) -> str:

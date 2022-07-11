@@ -8,10 +8,8 @@ from util.navigation import Coordinate, Direction
 
 
 class Simulation(ABC):
-    __SIZE = Config.world_size()
-
     def __init__(self):
-        self.__world = World(Simulation.__SIZE)
+        self.__world = World(Config.instance().world_size)
 
     @property
     def _world(self) -> World:
@@ -31,8 +29,6 @@ class Simulation(ABC):
 
 
 class SimpleSimulation(Simulation):
-    __STEPS_PER_PLOT = Config.steps_per_plot()
-
     def __init__(self, seed: int = 7):
         super().__init__()
         self.__rand = Random(seed)
@@ -66,5 +62,5 @@ class SimpleSimulation(Simulation):
     def to_channel_triple(self) -> Tuple[int, int, int]:
         # self._world.print()
         self.__plot_counter += 1
-        self._world.plot(save=self.__plot_counter % SimpleSimulation.__STEPS_PER_PLOT == 0)
+        self._world.plot(save=self.__plot_counter % Config.instance().steps_per_plot == 0)
         return 0, 0, 0

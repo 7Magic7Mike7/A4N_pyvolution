@@ -168,8 +168,6 @@ class Creature(Tile):
 
 
 class Egg(Tile):
-    __INCUBATION_TIME = Config.egg_incubation_time()
-
     def __init__(self, pos: Coordinate, orientation: Direction, mother: Creature, father: Creature):
         super().__init__(pos)
         self.__orientation = orientation
@@ -183,18 +181,16 @@ class Egg(Tile):
         return self.__orientation
 
     def color(self) -> Tuple[float, float, float]:
-        value = 0.5 + 0.5 * (self.__age / Egg.__INCUBATION_TIME)
+        value = 0.5 + 0.5 * (self.__age / Config.instance().egg_incubation_time)
         value = min(value, 1.0)
         return 250, 0.6, value
 
     def update(self, get_tile: Callable[[Optional[Coordinate], Optional[int], Optional[int]], Optional["Tile"]]):
         self.__age += 1
-        return self.__age <= Egg.__INCUBATION_TIME
+        return self.__age <= Config.instance().egg_incubation_time
 
     def produced(self) -> Optional["Tile"]:
-        if self.__age >= Egg.__INCUBATION_TIME:
-            if self.__born_creature is not None:
-                debug = True
+        if self.__age >= Config.instance().egg_incubation_time:
             self.__born_creature = Creature(self.__genome, self.pos, self.__orientation)
             print("A creature was born!")
         return self.__born_creature

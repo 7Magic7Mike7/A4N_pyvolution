@@ -7,6 +7,7 @@ import a4n_evolution as a4n
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
+    a4n.init("config.afntdconf")
     # a4n.test()
     a4n.create_animated_plot()
 

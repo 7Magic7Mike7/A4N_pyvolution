@@ -8,8 +8,6 @@ from util.navigation import Coordinate
 
 
 class Food(Tile):
-    __SPOIL_TIME = Config.food_spoil_time()
-
     def __init__(self, pos: Coordinate, energy: float = 10):
         super().__init__(pos)
         self.__energy = energy
@@ -26,7 +24,7 @@ class Food(Tile):
     def update(self,
                get_tile: Callable[[Optional[Coordinate], Optional[int], Optional[int]], Optional["Tile"]]) -> bool:
         self.__age += 1
-        return self.__age < Food.__SPOIL_TIME
+        return self.__age < Config.instance().food_spoil_time
 
     def produced(self) -> Optional["Tile"]:
         return None

@@ -1,5 +1,5 @@
 from random import Random
-from typing import List, Tuple
+from typing import List, Optional
 
 import numpy as np
 import torch
@@ -18,13 +18,17 @@ class Genome:
     __TARGET_SIZE = 5
     __SOURCE_SIZE = 5
 
-    __rand = Random(Config.seed())
+    __rand: Optional[Random] = None
+
+    @staticmethod
+    def activate_mutations(seed: int):
+        Genome.__rand = Random(seed)
 
     @staticmethod
     def reproduce(mother: "Genome", father: "Genome") -> "Genome":
         genome = ""
         for i in range(Genome.NUM_OF_GENES):
-            if Genome.__rand.random() < Config.mutation_chance():
+            if Genome.__rand is not None and Genome.__rand.random() < Config.instance().mutation_chance:
                 child: int = Genome.__rand.randint(0, 10**Genome.GENE_LENGTH)
             else:
                 gene_start = i * Genome.GENE_LENGTH
@@ -32,7 +36,10 @@ class Genome:
                 m = int(mother.__data[gene_start:gene_end])
                 f = int(father.__data[gene_start:gene_end])
 
-                mom_ratio = Genome.__rand.random()
+                if Genome.__rand is None:
+                    mom_ratio = 0.5
+                else:
+                    mom_ratio = Genome.__rand.random()
                 child: int = round(m * mom_ratio + f * (1.0 - mom_ratio))
             genome += format(child, f"0{Genome.GENE_LENGTH}d")
         return Genome(genome)
@@ -63,7 +70,7 @@ class Genome:
         # sum = 85 digits
         index = 0
         cur_gene = int(data[index:index+Genome.GENE_LENGTH])
-        self.__max_energy = Config.min_max_energy() + cur_gene % Config.max_bonus_energy()
+        self.__max_energy = Config.instance().min_max_energy + cur_gene % Config.instance().max_bonus_energy
         index += Genome.GENE_LENGTH
 
         while index + Genome.GENE_LENGTH <= len(data):

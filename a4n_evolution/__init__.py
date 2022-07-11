@@ -4,6 +4,12 @@ from matplotlib import animation, pyplot as plt
 
 from util.config import Config
 from .interface import Interface
+from .simulation.world.creatures.genome import Genome
+
+
+def init(config_path: str):
+    Config.load(config_path)
+    Genome.activate_mutations(Config.instance().seed)
 
 
 def test():

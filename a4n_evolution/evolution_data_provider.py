@@ -40,10 +40,9 @@ class EvolutionSimulationDataProvider(DataProvider):
 
 class SimpleEvolSimDP(EvolutionSimulationDataProvider):
     def __init__(self):
-        seed = Config.seed()
-        simulation = SimpleSimulation(seed)
-        # data_provider = RandomDataProvider(seed)
-        data_provider = ServerDataProvider(sim_id=0)
+        simulation = SimpleSimulation(Config.instance().seed)
+        data_provider = RandomDataProvider(Config.instance().seed)
+        # data_provider = ServerDataProvider(sim_id=0)
         request_decider = RequestDecider()
         super(SimpleEvolSimDP, self).__init__(simulation, data_provider,
-                                              request_decider.ever_x_steps(Config.steps_per_populate_call()))
+                                              request_decider.ever_x_steps(Config.instance().steps_per_populate_call))

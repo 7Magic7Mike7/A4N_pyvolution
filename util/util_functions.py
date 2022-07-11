@@ -1,14 +1,12 @@
 from typing import Tuple
 
 
-def hsv_to_rgb(h: float, s: float, v: float) -> Tuple[int, int, int]:
+def hsv_to_rgb(hsv: Tuple[float, float, float]) -> Tuple[int, int, int]:
     """
-
-    :param h: [0, 360[
-    :param s: [0, 1]
-    :param v: [0, 1]
-    :return: 3x ints in [0, 256[
+    :param hsv: hue [0, 360], s [0, 1], v [0, 1]
+    :return: 3 ints (r, g, b) in [0, 256[
     """
+    h, s, v = hsv
     # source: https://www.rapidtables.com/convert/color/hsv-to-rgb.html
     c = v * s
     x = c * (1 - abs((h / 60) % 2 - 1))

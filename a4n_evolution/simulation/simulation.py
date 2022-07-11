@@ -5,6 +5,7 @@ from typing import Tuple
 from a4n_evolution.simulation.world import World, Food, Creature
 from util.config import Config
 from util.navigation import Coordinate, Direction
+from util.util_functions import hsv_to_rgb
 
 
 class Simulation(ABC):
@@ -35,7 +36,7 @@ class SimpleSimulation(Simulation):
         Creature.set_world_dimension(self._world.width, self._world.height)
         self.__plot_counter = 0
         self.__populate_counter = 0
-
+        self.__x, self.__y = 0, 0   # for conversion to channel triple
 
     def process_step(self):
         self._world.update()
@@ -63,4 +64,16 @@ class SimpleSimulation(Simulation):
         # self._world.print()
         self.__plot_counter += 1
         self._world.plot(save=self.__plot_counter % Config.instance().steps_per_plot == 0)
-        return 0, 0, 0
+
+        tile = self._world.get(x=self.__x, y=self.__y)
+        self.__x += 1
+        if self.__x >= self._world.width:
+            self.__x = 0
+            self.__y += 1
+            if self.__y >= self._world.height:
+                self.__y = 0
+
+        if tile is None:
+            return 0, 0, 0
+        else:
+            return hsv_to_rgb(tile.color())

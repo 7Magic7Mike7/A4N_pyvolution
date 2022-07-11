@@ -141,9 +141,8 @@ class World:
         self.__ax.set_ylim([-0.5, self.height + 0.5])
 
         for i, tile in enumerate(self.__world.values()):
-            color = tile.color()
-            color = hsv_to_rgb(color[0], color[1], color[2])
-            color = f"#{'%02x%02x%02x' % (color[0], color[1], color[2])}"
+            color = hsv_to_rgb(tile.color())
+            color = f"#{'%02x%02x%02x' % (color[0], color[1], color[2])}"   # convert to hex color
             self.__ax.scatter(x=tile.pos.x, y=tile.pos.y, c=color)
 
         if save and Config.instance().save_plots:

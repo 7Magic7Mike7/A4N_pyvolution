@@ -3,7 +3,7 @@ from typing import Optional
 
 import numpy as np
 
-from util.config import Config
+from arsfornons.util.config import Config
 
 
 class Genome:

@@ -1,7 +1,5 @@
-
-from a4n_evolution.data_provider import RandomDataProvider, FileDataProvider, ServerDataProvider
-from a4n_evolution.evolution_data_provider import SimpleEvolSimDP
-from util.config import Config
+from arsfornons.evolution_data_provider import SimpleEvolSimDP
+from arsfornons.util.config import Config
 
 
 class Interface:

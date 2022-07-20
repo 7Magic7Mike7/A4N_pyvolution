@@ -2,9 +2,9 @@ from typing import Callable, Optional, Tuple
 
 import numpy as np
 
-from a4n_evolution.simulation.world.tiles import Tile
-from util.config import Config
-from util.navigation import Coordinate
+from arsfornons.simulation.world.tiles import Tile
+from arsfornons.util.config import Config
+from arsfornons.util.navigation import Coordinate
 
 
 class Food(Tile):

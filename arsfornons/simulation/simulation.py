@@ -2,10 +2,10 @@ from abc import ABC, abstractmethod
 from random import Random
 from typing import Tuple
 
-from a4n_evolution.simulation.world import World, Food, Creature
-from util.config import Config
-from util.navigation import Coordinate, Direction
-from util.util_functions import hsv_to_rgb
+from arsfornons.simulation.world import World, Food, Creature
+from arsfornons.util.config import Config
+from arsfornons.util.navigation import Coordinate, Direction
+from arsfornons.util.util_functions import hsv_to_rgb
 
 
 class Simulation(ABC):

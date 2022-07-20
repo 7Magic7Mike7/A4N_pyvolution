@@ -1,7 +1,7 @@
 
 from enum import Enum
 
-from util import Logger
+from arsfornons.util import Logger
 
 
 class Direction(Enum):

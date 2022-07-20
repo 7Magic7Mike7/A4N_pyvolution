@@ -2,10 +2,10 @@ from typing import Callable, Optional, Tuple
 
 import numpy as np
 
-from a4n_evolution.simulation.world.tiles import Tile
-from a4n_evolution.simulation.world.creatures.genome import Genome, Brain
-from util.config import Config
-from util.navigation import Coordinate, Direction
+from arsfornons.simulation.world.tiles import Tile
+from arsfornons.simulation.world.creatures.genome import Genome, Brain
+from arsfornons.util.config import Config
+from arsfornons.util.navigation import Coordinate, Direction
 
 
 class Creature(Tile):

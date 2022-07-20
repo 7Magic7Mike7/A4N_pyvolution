@@ -5,7 +5,7 @@ import requests
 from abc import ABC, abstractmethod
 from typing import Tuple, List, Optional
 
-from a4n_evolution.simulation.world.creatures.genome import Genome
+from arsfornons.simulation.world.creatures.genome import Genome
 
 
 class DataProvider(ABC):

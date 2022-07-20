@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Callable, Optional, Tuple
 
-from util.navigation import Coordinate
+from arsfornons.util.navigation import Coordinate
 
 
 class Tile(ABC):

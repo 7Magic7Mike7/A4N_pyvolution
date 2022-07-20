@@ -15,6 +15,10 @@ class EvolutionSimulationDataProvider(DataProvider):
         self.__should_request_new_data = should_request_new_data
         self.__new_data_available = False
 
+    @property
+    def _simulation(self) -> Simulation:
+        return self.__simulation
+
     def request_new_data(self) -> None:
         if self.__should_request_new_data():
             self.__base_data_provider.request_new_data()
@@ -46,3 +50,9 @@ class SimpleEvolSimDP(EvolutionSimulationDataProvider):
         request_decider = RequestDecider()
         super(SimpleEvolSimDP, self).__init__(simulation, data_provider,
                                               request_decider.ever_x_steps(Config.instance().steps_per_populate_call))
+
+    def get_prepared_data(self) -> Tuple[int, int, int]:
+        try:
+            return super(SimpleEvolSimDP, self).get_prepared_data()
+        except:
+            return self._simulation.to_channel_triple()

@@ -121,7 +121,7 @@ class Creature(Tile):
         if driven_actuator in [0, 1]:
             self.__turn(driven_actuator)
         elif driven_actuator in [2, 3, 4, 5]:
-            if mate_ready is not None:  # mate_ready implies that mate_tile is a Creature
+            if mate_ready > 0:  # mate_ready implies that mate_tile is a Creature
                 self.__mate(mate_tile)
             else:
                 self.__move(driven_actuator)

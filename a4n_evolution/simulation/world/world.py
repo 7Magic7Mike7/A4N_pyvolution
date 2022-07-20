@@ -2,7 +2,7 @@ import datetime
 import os
 from typing import Optional, Dict, Tuple
 
-from matplotlib import pyplot as plt
+# from matplotlib import pyplot as plt
 
 from a4n_evolution.simulation.world.tiles import Tile, Food
 from a4n_evolution.simulation.world.creatures import Creature, Egg
@@ -27,7 +27,7 @@ class World:
 
         if t2 is not None:
             if isinstance(t1, Egg):
-                return isinstance(t2, Food) # eggs only win against food
+                return isinstance(t2, Food)  # eggs only win against food
 
             if isinstance(t1, Creature):
                 if isinstance(t2, Food):
@@ -64,9 +64,9 @@ class World:
         self.__width = size
         self.__height = size
         self.__age = 0
-        self.__world: Dict[Tile] = {}
+        self.__world: Dict[Coordinate, Tile] = {}
 
-        self.__fig, self.__ax = plt.subplots()
+        # self.__fig, self.__ax = plt.subplots()
         self.__file_prefix = str(datetime.datetime.now()).replace(":", "_")
         self.__file_index = 0
 
@@ -135,7 +135,9 @@ class World:
         print(str_rep)
 
     def plot(self, save: bool = False):
+        pass
         # self.__ax.grid(True)
+        """
         self.__ax.clear()
         self.__ax.set_xlim([-0.5, self.width + 0.5])
         self.__ax.set_ylim([-0.5, self.height + 0.5])
@@ -152,3 +154,4 @@ class World:
             path = os.path.join(dir_path, str(self.__file_index))
             self.__fig.savefig(path)
             self.__file_index += 1
+        """

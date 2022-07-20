@@ -1,6 +1,7 @@
 
 from a4n_evolution.data_provider import RandomDataProvider, FileDataProvider, ServerDataProvider
 from a4n_evolution.evolution_data_provider import SimpleEvolSimDP
+from util.config import Config
 
 
 class Interface:
@@ -10,6 +11,8 @@ class Interface:
 
     @staticmethod
     def init():
+        if Config.instance() is None:
+            Config()  # create the default config
         # Interface.__data_provider = ServerDataProvider(sim_id=0)
         Interface.__data_provider = SimpleEvolSimDP()
         Interface.__is_initialized = True

@@ -43,7 +43,7 @@ class Config:
                  steps_per_populate_call: int = 3, egg_incubation_time: int = 7, food_spoil_time: int = 50):
         if Config.__instance is None:
             self.__save_animation = save_animation
-            self.__interval = interval
+            self.__interval = interval      # in ms
             self.__num_of_frames = num_of_frames
             self.__save_plots = save_plots
             self.__steps_per_plot = steps_per_plot

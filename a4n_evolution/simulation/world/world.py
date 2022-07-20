@@ -104,6 +104,16 @@ class World:
             return self.__world[c]
         return None
 
+    def next_tile_after_or_at(self, start: Coordinate) -> Optional[Tuple[Coordinate, Tile]]:
+        if start in self.__world:
+            return start, self.__world[start]
+
+        for key in self.__world.keys():
+            if Coordinate.is_before(start, key, row_wise=True):
+                # take the first tile after the start position
+                return key, self.__world[key]
+        return None
+
     def place(self, tile: Tile):
         if self.validate_position(c=tile.pos)[0]:
             World.__place(tile, self.__world)

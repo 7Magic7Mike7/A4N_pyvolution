@@ -16,12 +16,12 @@ def init(config_path: str):
 def test():
     Interface.init()
     for i in range(0, 100):
-        print(Interface.get_data())
+        print(Interface.get_data(0))
 
 
 def create_animated_plot():
     def get_data_wrapper(*kwargs):
-        Interface.get_data()
+        Interface.get_data(0)
 
     Interface.init()
     """

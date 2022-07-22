@@ -1,6 +1,6 @@
 from typing import Callable, Tuple
 
-from arsfornons.data_provider import DataProvider, ServerDataProvider, RandomDataProvider
+from arsfornons.data_provider import DataProvider, ServerDataProvider, RandomDataProvider, FileDataProvider
 from arsfornons.simulation.request_decider import RequestDecider
 from arsfornons.simulation.simulation import Simulation, SimpleSimulation
 from arsfornons.simulation.world.creatures.genome import Genome
@@ -42,17 +42,26 @@ class EvolutionSimulationDataProvider(DataProvider):
         return self.__simulation.to_channel_triple()
 
 
-class SimpleEvolSimDP(EvolutionSimulationDataProvider):
-    def __init__(self):
+class _EvolSimDP(EvolutionSimulationDataProvider):
+    def __init__(self, data_provider: DataProvider):
         simulation = SimpleSimulation(Config.instance().seed)
-        data_provider = RandomDataProvider(Config.instance().seed)
-        # data_provider = ServerDataProvider(sim_id=0)
         request_decider = RequestDecider()
-        super(SimpleEvolSimDP, self).__init__(simulation, data_provider,
-                                              request_decider.ever_x_steps(Config.instance().steps_per_populate_call))
+        super(_EvolSimDP, self).__init__(simulation, data_provider,
+                                         request_decider.ever_x_steps(Config.instance().steps_per_populate_call))
 
     def get_prepared_data(self) -> Tuple[int, int, int]:
         try:
-            return super(SimpleEvolSimDP, self).get_prepared_data()
+            return super(_EvolSimDP, self).get_prepared_data()
         except:
             return self._simulation.to_channel_triple()
+
+
+class SimpleEvolSimDP(_EvolSimDP):
+    def __init__(self, sim_id: int):
+        super(SimpleEvolSimDP, self).__init__(ServerDataProvider(sim_id))
+
+
+class InfiniteFileEvolSimDP(_EvolSimDP):
+    def __init__(self):
+        super(InfiniteFileEvolSimDP, self).__init__(FileDataProvider())
+

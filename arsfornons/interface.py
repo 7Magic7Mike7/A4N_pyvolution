@@ -1,30 +1,43 @@
-from arsfornons.evolution_data_provider import SimpleEvolSimDP
+from typing import List
+
+from arsfornons.data_provider import DataProvider, RandomDataProvider
+from arsfornons.evolution_data_provider import SimpleEvolSimDP, InfiniteFileEvolSimDP
 from arsfornons.util.config import Config
 
 
 class Interface:
     __is_initialized = False
-    __data_provider = None
-    __counter = 0
+    __data_providers: List[DataProvider] = []
 
     @staticmethod
     def init():
         if Config.instance() is None:
             Config()  # create the default config
         # Interface.__data_provider = ServerDataProvider(sim_id=0)
-        Interface.__data_provider = SimpleEvolSimDP()
+        Interface.__data_providers = [
+            SimpleEvolSimDP(0),
+            SimpleEvolSimDP(1),
+            SimpleEvolSimDP(2),
+            SimpleEvolSimDP(3),
+            SimpleEvolSimDP(4),
+            SimpleEvolSimDP(5),
+            SimpleEvolSimDP(6),
+            SimpleEvolSimDP(7),
+            InfiniteFileEvolSimDP(),
+            RandomDataProvider(Config.instance().seed),
+        ]
         Interface.__is_initialized = True
 
     @staticmethod
-    def get_data():
+    def get_data(index: int):
         if not Interface.__is_initialized:
             Interface.init()
-        # print(f"get_data() #{Interface.__counter}")
-        Interface.__counter += 1
 
-        if Interface.__data_provider:
-            data = Interface.__data_provider.get_prepared_data()
-            Interface.__data_provider.request_new_data()
+        if 0 <= index < len(Interface.__data_providers):
+            data_provider = Interface.__data_providers[index]
+            data = data_provider.get_prepared_data()
+            data_provider.request_new_data()
             return data
         else:
-            raise RuntimeError("Data provider is uninitialized! Did you forget to call Interface.init()?")
+            raise RuntimeError(f"Invalid index provided: {index}. Must be between 0 and "
+                               f"{len(Interface.__data_providers)}")

@@ -56,7 +56,7 @@ class RandomDataProvider(DataProvider):
 
 class FileDataProvider(DataProvider):
     # D:\Documents\pycharm_workspace\TestProject\data\a4n\s0.txt
-    __PATH = os.path.join("D:\\", "Documents", "pycharm_workspace", "TestProject", "data", "a4n", "s0.txt")
+    __PATH = os.path.join(os.path.dirname(__file__), "data", "cache_data.txt")
 
     @staticmethod
     def read(path: str) -> str:
@@ -66,7 +66,8 @@ class FileDataProvider(DataProvider):
             return content
 
     def __init__(self, path: str = __PATH):
-        self.__data = self.read(path).splitlines()
+        data = self.read(path).splitlines()
+        self.__data = [d.replace(" ", "") for d in data]    # remove spaces between genes
         self.__index = 0
 
     def request_new_data(self) -> None:

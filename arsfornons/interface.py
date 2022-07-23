@@ -1,7 +1,7 @@
 from typing import List
 
 from arsfornons.data_provider import DataProvider, RandomDataProvider
-from arsfornons.evolution_data_provider import SimpleEvolSimDP, InfiniteFileEvolSimDP
+from arsfornons.evolution_data_provider import SimpleEvolSimDP, InfiniteFileEvolSimDP, InfiniteRandomEvolSimDP
 from arsfornons.util.config import Config
 
 

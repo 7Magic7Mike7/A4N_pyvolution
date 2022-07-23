@@ -1,16 +1,16 @@
-save_animation = False
-1000
-100
-False
-2
-1088
-300
-0.001
-500
-300
-3
-2
-1
-7
-50
-False
+False       #- save animations (debugging!)
+100         #- time interval for plotting (debugging!)
+1000        #- number of frames to plot (debugging!)
+False       #- save plots (debugging!)
+1           #- steps per plot (debugging!)
+1088        #+ seed for a few random things like mutation and spawn position
+300         #+ size of the world
+0.001       #+ mutation chance
+500         #+ lowest possible value for the maximum energy of a creature
+300         #+ how much maximum energy can at most be added to a creature (based on gene)
+3           #+ steps per populate() call (spawning food or creatures from data)
+2           #+ number of populate() calls until we spawn a new creature (if we can get new data)
+1           #+ number of populate() calls until we spawn a new food tile
+7           #+ egg incubation time, i.e. simulation steps until an egg hatches
+50          #+ food spoil time, i.e. simulation steps until food tile is removed
+False       #+ allow egg eating, i.e. whether a creature gains a benefit (energy) when eating an egg or not

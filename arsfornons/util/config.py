@@ -3,6 +3,7 @@ from typing import Optional, List
 
 
 class Config:
+    __COMMENT = "#"
     __instances: List["Config"] = []
     __active_index: int = 0
 
@@ -15,14 +16,22 @@ class Config:
             with open(path, "r") as file:
                 content = file.readlines()
 
+                def normalize(text: str) -> str:
+                    if Config.__COMMENT in text:
+                        text = text[:text.index(Config.__COMMENT)]  # remove comment
+                    return text.strip(" ")
+
                 def cbool(index: int) -> bool:
-                    return content[index].lower() in ["yes", "true"]
+                    text = normalize(content[index])
+                    return text.lower() in ["yes", "true", "y", "t", "1"]
 
                 def cint(index: int) -> int:
-                    return int(content[index])
+                    text = normalize(content[index])
+                    return int(text)
 
                 def cfloat(index: int) -> float:
-                    return float(content[index])
+                    text = normalize(content[index])
+                    return float(text)
 
                 Config(cbool(0), cint(1), cint(2), cbool(3),
                        cint(4),

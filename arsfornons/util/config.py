@@ -32,14 +32,14 @@ class Config:
         else:
             raise FileNotFoundError(f"Config file does not exist: {os.path.abspath(path)}")
 
-        cfs = [Config()] * 10    # custom configs for testing
-        cfs[1].__food_spoil_time = 1000000   # food "never" spoils
-        cfs[2].__populate_calls_per_food_spawn = 0    # food never spawns
-        cfs[3].__egg_incubation_time = 1    # eggs instantly hatch
-        cfs[4].__mutation_chance = 0.5      # high mutation chance
-        cfs[5].__world_size = 6             # extra small world
-        cfs[6].__world_size = 1500          # extra big world
-        cfs[7].__allow_egg_eating = True    # allow eating of eggs
+        cfs = [Config() for _ in range(10)]  # custom configs for testing
+        cfs[1].__food_spoil_time = 1000000  # food "never" spoils
+        cfs[2].__populate_calls_per_food_spawn = 0  # food never spawns
+        cfs[3].__egg_incubation_time = 1  # eggs instantly hatch
+        cfs[4].__mutation_chance = 0.5  # high mutation chance
+        cfs[5].__world_size = 6  # extra small world
+        cfs[6].__world_size = 1500  # extra big world
+        cfs[7].__allow_egg_eating = True  # allow eating of eggs
         # cfs[8] do nothing special since the data provider is already custom
         # fast creature spawns for random data
         cfs[9].__populate_calls_per_creature_spawn = 1

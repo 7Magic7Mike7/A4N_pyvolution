@@ -68,29 +68,29 @@ class Config:
                  steps_per_populate_call: int = 3, populate_calls_per_creature_spawn: int = 2,
                  populate_calls_per_food_spawn: int = 1, egg_incubation_time: int = 7, food_spoil_time: int = 50,
                  allow_egg_eating: bool = False):
-            self.__save_animation = save_animation
-            self.__interval = interval      # in ms
-            self.__num_of_frames = num_of_frames
-            self.__save_plots = save_plots
-            self.__steps_per_plot = steps_per_plot
+        self.__save_animation = save_animation
+        self.__interval = interval  # in ms
+        self.__num_of_frames = num_of_frames
+        self.__save_plots = save_plots
+        self.__steps_per_plot = steps_per_plot
 
-            self.__seed = seed
-            self.__world_size = world_size
-            self.__mutation_chance = mutation_chance
-            self.__min_max_energy = min_max_energy
-            self.__max_bonus_energy = max_bonus_energy
+        self.__seed = seed
+        self.__world_size = world_size
+        self.__mutation_chance = mutation_chance
+        self.__min_max_energy = min_max_energy
+        self.__max_bonus_energy = max_bonus_energy
 
-            self.__steps_per_populate_call = steps_per_populate_call
-            self.__populate_calls_per_creature_spawn = populate_calls_per_creature_spawn
-            self.__populate_calls_per_food_spawn = populate_calls_per_food_spawn
-            self.__egg_incubation_time = egg_incubation_time
-            self.__food_spoil_time = food_spoil_time
-            self.__allow_egg_eating = allow_egg_eating
+        self.__steps_per_populate_call = steps_per_populate_call
+        self.__populate_calls_per_creature_spawn = populate_calls_per_creature_spawn
+        self.__populate_calls_per_food_spawn = populate_calls_per_food_spawn
+        self.__egg_incubation_time = egg_incubation_time
+        self.__food_spoil_time = food_spoil_time
+        self.__allow_egg_eating = allow_egg_eating
 
-            if len(Config.__instances) == 0:
-                Config.__instances.append(self)
+        if len(Config.__instances) == 0:
+            Config.__instances.append(self)
 
-# ANIMATION
+    # ANIMATION
     @property
     def save_animation(self) -> bool:
         return self.__save_animation
@@ -103,7 +103,7 @@ class Config:
     def num_of_frames(self) -> int:
         return self.__num_of_frames
 
-# PLOTS
+    # PLOTS
     @property
     def save_plots(self) -> bool:
         return self.__save_plots
@@ -112,7 +112,7 @@ class Config:
     def steps_per_plot(self) -> int:
         return self.__steps_per_plot
 
-# SIMULATION
+    # SIMULATION
     @property
     def seed(self) -> int:
         return self.__seed
@@ -133,7 +133,7 @@ class Config:
     def max_bonus_energy(self) -> int:
         return self.__max_bonus_energy
 
-# TILES
+    # TILES
 
     @property
     def steps_per_populate_call(self) -> int:

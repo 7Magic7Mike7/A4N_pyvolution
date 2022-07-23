@@ -177,7 +177,6 @@ class Egg(Tile):
         self.__genome = Genome.reproduce(mother.genome, father.genome)
         self.__age = 0
         self.__born_creature = None
-        print("An egg was laid!")
 
     @property
     def orientation(self) -> Direction:

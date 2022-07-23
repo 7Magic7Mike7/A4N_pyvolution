@@ -8,7 +8,9 @@ class Config:
     __active_index: int = 0
 
     @staticmethod
-    def load(path: str, reset: bool = False):
+    def load(path: str = None, reset: bool = False):
+        if path is None:
+            path = os.path.join(os.path.dirname(__file__), "..", "config.afntdconf")
         if reset:
             Config.__instances = []
 

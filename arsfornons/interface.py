@@ -12,7 +12,7 @@ class Interface:
     @staticmethod
     def init():
         if Config.instance() is None:
-            Config()  # create the default config
+            Config.load()  # create the default config
         # Interface.__data_provider = ServerDataProvider(sim_id=0)
         Interface.__data_providers = [
             SimpleEvolSimDP(0),

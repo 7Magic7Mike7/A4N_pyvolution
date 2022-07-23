@@ -60,7 +60,9 @@ class Config:
 
     @staticmethod
     def instance() -> Optional["Config"]:
-        return Config.__instances[Config.__active_index]
+        if 0 <= Config.__active_index < len(Config.__instances):
+            return Config.__instances[Config.__active_index]
+        return None
 
     @staticmethod
     def activate_index(index: int):

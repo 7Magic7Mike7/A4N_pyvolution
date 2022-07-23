@@ -28,6 +28,10 @@ class Tile(ABC):
         return 0, 0, 0  # black
 
     @abstractmethod
+    def eat_energy(self, eater: "Tile") -> float:
+        pass
+
+    @abstractmethod
     def update(self, get_tile: Callable[[Optional[Coordinate], Optional[int], Optional[int]], Optional["Tile"]]) \
             -> bool:
         """

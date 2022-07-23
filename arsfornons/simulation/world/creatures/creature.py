@@ -81,6 +81,9 @@ class Creature(Tile):
 
         return hue, saturation, value
 
+    def eat_energy(self, eater: "Tile") -> float:
+        return 0    # todo move to config
+
     def update(self, get_tile: Callable[[Optional[Coordinate], Optional[int], Optional[int]], Optional[Tile]]) -> bool:
         self.__age += 1
 
@@ -160,8 +163,8 @@ class Creature(Tile):
             self.__egg = None
             return egg
 
-    def eat(self, food):
-        self.__energy = min(self.__energy + food.energy, self.genome.max_energy)
+    def eat(self, food: Tile):
+        self.__energy = min(self.__energy + food.eat_energy(self), self.genome.max_energy)
 
     def to_string(self) -> str:
         return "C"
@@ -184,6 +187,9 @@ class Egg(Tile):
         value = 0.5 + 0.5 * (self.__age / Config.instance().egg_incubation_time)
         value = min(value, 1.0)
         return 250, 0.6, value
+
+    def eat_energy(self, eater: "Tile") -> float:
+        return 160   # todo move to config
 
     def update(self, get_tile: Callable[[Optional[Coordinate], Optional[int], Optional[int]], Optional["Tile"]]):
         self.__age += 1

@@ -34,6 +34,7 @@ class Interface:
             Interface.init()
 
         if 0 <= index < len(Interface.__data_providers):
+            Config.activate_index(index)
             data_provider = Interface.__data_providers[index]
             data = data_provider.get_prepared_data()
             data_provider.request_new_data()

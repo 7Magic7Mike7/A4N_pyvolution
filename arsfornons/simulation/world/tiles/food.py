@@ -8,18 +8,17 @@ from arsfornons.util.navigation import Coordinate
 
 
 class Food(Tile):
-    def __init__(self, pos: Coordinate, energy: float = 10):
+    def __init__(self, pos: Coordinate, energy: float = 70):    # todo base engery to config
         super().__init__(pos)
         self.__energy = energy
         self.__age = 0
 
-    @property
-    def energy(self) -> float:
-        return self.__energy
-
     def color(self) -> Tuple[float, float, float]:
         saturation = np.tanh(self.__energy)
         return 150, saturation, 0.8
+
+    def eat_energy(self, eater: "Tile") -> float:
+        return self.__energy
 
     def update(self,
                get_tile: Callable[[Optional[Coordinate], Optional[int], Optional[int]], Optional["Tile"]]) -> bool:

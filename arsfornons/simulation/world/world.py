@@ -34,7 +34,8 @@ class World:
                     t1.eat(t2)
                 elif isinstance(t2, Creature):
                     pass    # todo implement fighting?
-                # todo eat eggs?
+                elif Config.instance().allow_egg_eating and isinstance(t2, Egg):
+                    t1.eat(t2)
             elif isinstance(t1, Food):
                 if isinstance(t2, Creature):
                     t2.eat(t1)

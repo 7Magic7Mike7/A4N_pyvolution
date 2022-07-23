@@ -1,0 +1,31 @@
+import os
+from arsfornons import Interface
+
+# me - this DAT
+# scriptOp - the OP which is cooking
+#
+# press 'Setup Parameters' in the OP to call this function to re-create the parameters.
+def onSetupParameters(scriptOp):
+	page = scriptOp.appendCustomPage('Custom')
+	p = page.appendFloat('Valuea', label='Value A')
+	p = page.appendFloat('Valueb', label='Value B')
+
+	p = page.appendString('Path', label='Path')
+
+    Config.load()
+	Interface.init(index=0)         # define the index (0 to 9) here and also below at get_data()
+
+	return
+
+# called whenever custom pulse parameter is pushed
+def onPulse(par):
+	return
+
+
+def onCook(scriptOp):
+	#scriptOp.clear()
+
+	data = Interface.get_data(index=0)     # define the index (0 to 9) here and also above at init()
+	scriptOp.appendRow(data)
+
+	return

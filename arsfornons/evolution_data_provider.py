@@ -65,3 +65,7 @@ class InfiniteFileEvolSimDP(_EvolSimDP):
     def __init__(self):
         super(InfiniteFileEvolSimDP, self).__init__(FileDataProvider())
 
+
+class InfiniteRandomEvolSimDP(_EvolSimDP):
+    def __init__(self, seed: int):
+        super(InfiniteRandomEvolSimDP, self).__init__(RandomDataProvider(seed))

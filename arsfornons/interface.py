@@ -24,7 +24,7 @@ class Interface:
             SimpleEvolSimDP(6),
             SimpleEvolSimDP(7),
             InfiniteFileEvolSimDP(),
-            RandomDataProvider(Config.instance().seed),
+            InfiniteRandomEvolSimDP(Config.instance().seed),
         ]
         Interface.__is_initialized = True
 

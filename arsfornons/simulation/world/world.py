@@ -109,11 +109,16 @@ class World:
         if start in self.__world:
             return start, self.__world[start]
 
+        if len(self.__world.keys()) == 0:
+            return None
         for key in self.__world.keys():
             if Coordinate.is_before(start, key, row_wise=True):
                 # take the first tile after the start position
                 return key, self.__world[key]
-        return None
+        # if no tiles are after start we restart searching at the beginning
+        # recursion depth is guaranteed to be at most 1 because if there is no tile we return
+        # and if there, is we'll find it
+        return self.next_tile_after_or_at(Coordinate(0, 0))
 
     def place(self, tile: Tile):
         if self.validate_position(c=tile.pos)[0]:

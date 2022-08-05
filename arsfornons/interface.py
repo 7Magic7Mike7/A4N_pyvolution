@@ -1,7 +1,8 @@
 from typing import List
 
-from arsfornons.data_provider import DataProvider, RandomDataProvider
-from arsfornons.evolution_data_provider import SimpleEvolSimDP, InfiniteFileEvolSimDP, InfiniteRandomEvolSimDP
+from arsfornons.data_provider import DataProvider
+from arsfornons.evolution_data_provider import SimpleEvolSimDP, InfiniteFileEvolSimDP, InfiniteRandomEvolSimDP, \
+    InfiniteCacheEvolSimDP
 from arsfornons.util.config import Config
 
 
@@ -15,7 +16,7 @@ class Interface:
             Config.load()  # create the default config
         # Interface.__data_provider = ServerDataProvider(sim_id=0)
         Interface.__data_providers = [
-            SimpleEvolSimDP(0),
+            InfiniteCacheEvolSimDP(Config.instance().seed), #SimpleEvolSimDP(0),
             SimpleEvolSimDP(1),
             SimpleEvolSimDP(2),
             SimpleEvolSimDP(3),

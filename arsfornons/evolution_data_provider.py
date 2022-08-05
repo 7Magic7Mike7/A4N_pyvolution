@@ -1,6 +1,7 @@
 from typing import Callable, Tuple
 
-from arsfornons.data_provider import DataProvider, ServerDataProvider, RandomDataProvider, FileDataProvider
+from arsfornons.data_provider import DataProvider, ServerDataProvider, RandomDataProvider, FileDataProvider, \
+    CacheDataProvider
 from arsfornons.simulation.request_decider import RequestDecider
 from arsfornons.simulation.simulation import Simulation, SimpleSimulation
 from arsfornons.simulation.world.creatures.genome import Genome
@@ -69,3 +70,8 @@ class InfiniteFileEvolSimDP(_EvolSimDP):
 class InfiniteRandomEvolSimDP(_EvolSimDP):
     def __init__(self, seed: int):
         super(InfiniteRandomEvolSimDP, self).__init__(RandomDataProvider(seed))
+
+
+class InfiniteCacheEvolSimDP(_EvolSimDP):
+    def __init__(self, seed: int):
+        super().__init__(CacheDataProvider(seed))

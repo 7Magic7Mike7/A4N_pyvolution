@@ -1,10 +1,9 @@
 from random import Random
-from typing import List, Optional
+from typing import Optional
 
 import numpy as np
-import torch
 
-from util.config import Config
+from arsfornons.util.config import Config
 
 
 class Genome:
@@ -13,7 +12,7 @@ class Genome:
     NUM_OF_ACTUATORS = 6
     GENE_LENGTH = 5
     NUM_OF_GENES = 20
-    #MAX_VALUE = 10**(GENE_LENGTH * NUM_OF_GENES)
+    # MAX_VALUE = 10**(GENE_LENGTH * NUM_OF_GENES)
     __WEIGHT_SIZE = 6
     __TARGET_SIZE = 5
     __SOURCE_SIZE = 5
@@ -81,7 +80,6 @@ class Genome:
             self.__value += (cur_gene / 10**Genome.GENE_LENGTH)
 
         self.__value = np.tanh(self.__value)
-        test = True
 
     def __create_brain_connection(self, cur_gene: int):
         weight = cur_gene % (2 ** Genome.__WEIGHT_SIZE)
@@ -169,28 +167,6 @@ class Brain:
         return self.__nn.forward(data)
 
 
-class _MyNN(torch.nn.Module):
-    def __init__(self, n_in_features: int, n_out_features: int, layer_dimension: List[int]):
-        super(_MyNN, self).__init__()
-        nn = []
-        hl_in = n_in_features
-        for i in range(len(layer_dimension)):
-            nn.append(torch.nn.Linear(hl_in, layer_dimension[i], bias=True))
-            nn.append(torch.nn.ReLU())
-            hl_in = layer_dimension[i]
-
-        self.hidden_layers = torch.nn.Sequential(*nn)
-        self.output_layer = torch.nn.Linear(hl_in, n_out_features, bias=True)
-
-    def forward(self, x):
-        """Apply CNN to input `x` of shape (N, n_channels, X, Y), where N=n_samples and X, Y are spatial dimensions"""
-        nn_out = self.hidden_layers(x)  # apply hidden layers (N, n_in_channels, X, Y) -> (N, n_kernels, X, Y)
-        pred = self.output_layer(nn_out)  # apply output layer (N, n_kernels, X, Y) -> (N, 1, X, Y)
-
-        output_tensor = pred
-        return output_tensor
-
-
 class _OwnNN:
     def __init__(self, in_to_out: np.mat, in_to_hidden: np.mat, hidden_to_hidden: np.mat, hidden_to_out: np.mat):
         """
@@ -199,8 +175,7 @@ class _OwnNN:
         Third from hidden0 to hidden0
         Fourth from hidden0 to hidden1
         ...
-        Last from hidden X to out
-        :param layer_matrices:
+        Last from hidden X to ou
         """
         self.__i2o = in_to_out
         self.__i2h = in_to_hidden
@@ -235,4 +210,4 @@ def static_test():
             sensor_input.append(rand.random())
         test = brain.think(np.array(sensor_input))
         print(test)
-#static_test()
+# static_test()

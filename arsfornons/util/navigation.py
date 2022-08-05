@@ -1,7 +1,7 @@
 
 from enum import Enum
 
-from util import Logger
+from arsfornons.util import Logger
 
 
 class Direction(Enum):
@@ -120,6 +120,31 @@ class Coordinate:
     @staticmethod
     def distance(a: "Coordinate", b: "Coordinate") -> int:
         return abs(a.x - b.x) + abs(a.y - b.y)
+
+    @staticmethod
+    def is_before(a: "Coordinate", b: "Coordinate", row_wise: bool = True):
+        """
+        Compares if a is before b, meaning that it is encountered before b if we would go through all possible
+        Coordinates either row- or column-wise.
+        - Ex1: a = (0|1), b = (1|0), row_wise = True
+               returns True because a.y < b.y
+               if row_wise would be False, it would return False because b.x < a.x
+        - Ex2: a = (7|0), b = (7|9), row_wise = True
+               returns True because a and b are in the same row but a.x < b.x
+        - Ex3: a = (9|9), b = (9|9), row_wise can either be True or False
+               returns False because a == b and therefore a is not before b
+        :param a: the first Coordinate for comparison
+        :param b: the second Coordinate for comparison
+        :param row_wise: whether rows or columns are the primary axis
+        :return: True if a is encountered before b if we would go through all possible Coordinates
+        """
+        if a == b:
+            return False
+
+        if row_wise:
+            return a.y < b.y or a.y == b.y and a.x < b.x
+        else:
+            return a.x < b.x or a.x == b.x and a.y < b.y
 
     def __init__(self, x: int, y: int):
         self.__x = x

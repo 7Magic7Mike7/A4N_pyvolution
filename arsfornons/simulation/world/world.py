@@ -2,13 +2,13 @@ import datetime
 import os
 from typing import Optional, Dict, Tuple
 
-from matplotlib import pyplot as plt
+# from matplotlib import pyplot as plt
 
-from a4n_evolution.simulation.world.tiles import Tile, Food
-from a4n_evolution.simulation.world.creatures import Creature, Egg
-from util.config import Config
-from util.navigation import Coordinate
-from util.util_functions import hsv_to_rgb
+from arsfornons import Config
+from arsfornons.simulation.world.tiles import Tile, Food
+from arsfornons.simulation.world.creatures import Creature, Egg
+from arsfornons.util.navigation import Coordinate
+from arsfornons.util.util_functions import hsv_to_rgb
 
 
 class World:
@@ -27,14 +27,15 @@ class World:
 
         if t2 is not None:
             if isinstance(t1, Egg):
-                return isinstance(t2, Food) # eggs only win against food
+                return isinstance(t2, Food)  # eggs only win against food
 
             if isinstance(t1, Creature):
                 if isinstance(t2, Food):
                     t1.eat(t2)
                 elif isinstance(t2, Creature):
                     pass    # todo implement fighting?
-                # todo eat eggs?
+                elif Config.instance().allow_egg_eating and isinstance(t2, Egg):
+                    t1.eat(t2)
             elif isinstance(t1, Food):
                 if isinstance(t2, Creature):
                     t2.eat(t1)
@@ -64,9 +65,9 @@ class World:
         self.__width = size
         self.__height = size
         self.__age = 0
-        self.__world: Dict[Tile] = {}
+        self.__world: Dict[Coordinate, Tile] = {}
 
-        self.__fig, self.__ax = plt.subplots()
+        # self.__fig, self.__ax = plt.subplots()
         self.__file_prefix = str(datetime.datetime.now()).replace(":", "_")
         self.__file_index = 0
 
@@ -104,6 +105,21 @@ class World:
             return self.__world[c]
         return None
 
+    def next_tile_after_or_at(self, start: Coordinate) -> Optional[Tuple[Coordinate, Tile]]:
+        if start in self.__world:
+            return start, self.__world[start]
+
+        if len(self.__world.keys()) == 0:
+            return None
+        for key in self.__world.keys():
+            if Coordinate.is_before(start, key, row_wise=True):
+                # take the first tile after the start position
+                return key, self.__world[key]
+        # if no tiles are after start we restart searching at the beginning
+        # recursion depth is guaranteed to be at most 1 because if there is no tile we return
+        # and if there, is we'll find it
+        return self.next_tile_after_or_at(Coordinate(0, 0))
+
     def place(self, tile: Tile):
         if self.validate_position(c=tile.pos)[0]:
             World.__place(tile, self.__world)
@@ -135,7 +151,9 @@ class World:
         print(str_rep)
 
     def plot(self, save: bool = False):
+        pass
         # self.__ax.grid(True)
+        """
         self.__ax.clear()
         self.__ax.set_xlim([-0.5, self.width + 0.5])
         self.__ax.set_ylim([-0.5, self.height + 0.5])
@@ -152,3 +170,4 @@ class World:
             path = os.path.join(dir_path, str(self.__file_index))
             self.__fig.savefig(path)
             self.__file_index += 1
+        """

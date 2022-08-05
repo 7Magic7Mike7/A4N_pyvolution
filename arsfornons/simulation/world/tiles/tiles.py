@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Callable, Optional, Tuple
 
-from util.navigation import Coordinate
+from arsfornons.util.navigation import Coordinate
 
 
 class Tile(ABC):
@@ -26,6 +26,10 @@ class Tile(ABC):
         :return: HSV color, hue in [0, 360[, saturation and value in [0, 1.0]
         """
         return 0, 0, 0  # black
+
+    @abstractmethod
+    def eat_energy(self, eater: "Tile") -> float:
+        pass
 
     @abstractmethod
     def update(self, get_tile: Callable[[Optional[Coordinate], Optional[int], Optional[int]], Optional["Tile"]]) \

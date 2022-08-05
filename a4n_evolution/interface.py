@@ -1,5 +1,5 @@
 
-from a4n_evolution.data_provider import RandomDataProvider, FileDataProvider, ServerDataProvider
+from a4n_evolution.data_provider import RandomDataProvider, FileDataProvider, ServerDataProvider, CacheDataProvider
 from a4n_evolution.evolution_data_provider import SimpleEvolSimDP
 
 
@@ -11,7 +11,7 @@ class Interface:
     @staticmethod
     def init():
         # Interface.__data_provider = ServerDataProvider(sim_id=0)
-        Interface.__data_provider = SimpleEvolSimDP()
+        Interface.__data_provider = CacheDataProvider(7)
         Interface.__is_initialized = True
 
     @staticmethod

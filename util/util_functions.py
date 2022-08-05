@@ -32,3 +32,14 @@ def hsv_to_rgb(hsv: Tuple[float, float, float]) -> Tuple[int, int, int]:
             raise ValueError(f"Illegal color value: {val}!")
 
     return rgb
+
+
+def genome_to_hsv(genome: str) -> Tuple[float, float, float]:
+    assert len(genome) >= 3 + 1 + 1
+
+    h = float(genome[0:3])
+    genome = genome[3:]
+    length = round(len(genome) / 2)
+    s = float(f"0.{genome[:length]}")
+    v = float(f"0.{genome[length:]}")
+    return h, s, v

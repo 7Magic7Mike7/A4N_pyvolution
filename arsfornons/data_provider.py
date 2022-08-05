@@ -6,7 +6,7 @@ import requests
 from abc import ABC, abstractmethod
 from typing import Tuple, List, Optional
 
-from util.util_functions import genome_to_hsv, hsv_to_rgb
+from arsfornons.util.util_functions import genome_to_hsv, hsv_to_rgb
 from arsfornons.simulation.world.creatures.genome import Genome
 
 

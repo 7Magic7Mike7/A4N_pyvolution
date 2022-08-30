@@ -150,6 +150,68 @@ class ServerDataProvider(DataProvider):
         return data
 
 
+class ArsForNonsDataProvider(DataProvider):
+    __BUFFER_HALF_SIZE = 5
+    __NO_DATA = (0, 0, 0)
+
+    def __init__(self, sim_id: int):
+        self.__buffer: List[Optional[List[int]]] = [None] * (self.__BUFFER_HALF_SIZE * 2)
+        self.__index = 0
+        self.__sim_id = sim_id
+        self.__fill_buffer(start=0, num=self.__buffer_size)
+
+    @property
+    def __buffer_size(self) -> int:
+        return self.__BUFFER_HALF_SIZE * 2
+
+    def request_new_data(self) -> None:
+        self.__index += 1
+        if self.__index >= self.__buffer_size:
+            self.__index = 0
+
+        if self.__buffer[self.__index] is None:
+            self.__fill_buffer(start=self.__index, num=min(self.__BUFFER_HALF_SIZE, self.__buffer_size - self.__index))
+
+    def get_raw_data(self) -> str:
+        data = self.__buffer[self.__index]
+        if data:
+            self.__buffer[self.__index] = None
+            return str(data)
+        else:
+            return ""
+
+    def get_prepared_data(self) -> Tuple[int, int, int]:
+        data = self.__buffer[self.__index]
+        if data:
+            self.__buffer[self.__index] = None
+            a = data[0]
+            b = data[1]
+            c = data[2]
+            return a, b, c
+        else:
+            return self.__NO_DATA
+
+    def __fill_buffer(self, start: int, num: int = __BUFFER_HALF_SIZE):
+        new_data = self.__http_get(num)
+        for i in range(num):
+            if start + i >= self.__buffer_size or i >= len(new_data) or new_data[i] is None:
+                break
+            # print(f"filled buffer at {start + i}")
+            self.__buffer[start + i] = new_data[i]
+
+    def __http_get(self, num: int = __BUFFER_HALF_SIZE) -> List[List[int]]:
+        response = requests.get(
+            f'https://www.arsfornons.com/'
+            f'retrieve?'
+            f'simId={self.__sim_id}'
+            '&'
+            f'num={num}'
+        )
+        data = json.loads(response.text)
+        data = data["data"]
+        return data
+
+
 class CacheDataProvider(DataProvider):
     class PrimeCalculator:
         __MAX_NUM = 10000000

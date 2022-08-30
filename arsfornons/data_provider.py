@@ -139,7 +139,7 @@ class ServerDataProvider(DataProvider):
 
     def __http_get(self, num: int = __BUFFER_HALF_SIZE) -> List[str]:
         response = requests.get(
-            f'https://a4n-test.herokuapp.com/'
+            f'https://www.arsfornons.com/'
             f'retrieve?'
             f'simId={self.__sim_id}'
             '&'

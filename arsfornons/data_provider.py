@@ -2,6 +2,8 @@ import json
 import math
 import os
 import random
+from json import JSONDecodeError
+
 import requests
 from abc import ABC, abstractmethod
 from typing import Tuple, List, Optional
@@ -207,9 +209,16 @@ class ArsForNonsDataProvider(DataProvider):
             '&'
             f'num={num}'
         )
-        data = json.loads(response.text)
-        data = data["data"]
-        return data
+        try:
+            data = json.loads(response.text)
+            data = data["data"]
+            return data
+        except JSONDecodeError as e:
+            print(f"Found get() error:\n{e}")
+            data = []
+            for i in range(num):
+                data.append([0, 0, 0])
+            return data
 
 
 class CacheDataProvider(DataProvider):
